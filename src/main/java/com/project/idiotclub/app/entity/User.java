@@ -1,16 +1,17 @@
 package com.project.idiotclub.app.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Entity
+@Data
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private int id;
+    private Long id;
 
     @Column(name="user_name", updatable = false,nullable = false)
     private String name;
@@ -25,6 +26,7 @@ public class User {
     private String profile_image;
 
     @Column(name="user_role",updatable = true,nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
 

@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class RequestClubLeader {
+public class ChangeClubLeaderRequest {
 
     @Id
     private int id;
