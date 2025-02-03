@@ -2,6 +2,7 @@ package com.project.idiotclub.app.auth;
 
 import com.project.idiotclub.app.entity.CommunityCreator;
 import com.project.idiotclub.app.repo.CommunityCreatorRepo;
+import com.project.idiotclub.app.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,24 +14,26 @@ public class CommunityCreatorAuth {
     @Autowired
     private CommunityCreatorRepo communityCreatorRepo;
 
-    public CommunityCreator signUp(String name,String email,String password) {
+    public ApiResponse signUp(String name, String email, String password) {
         if(communityCreatorRepo.findByCreatorEmail(email).isPresent()){
-            return null;
+            return new ApiResponse(false,"already exist this email",null);
         }
         CommunityCreator communityCreator = new CommunityCreator();
         communityCreator.setCreatorEmail(email);
         communityCreator.setCreatorName(name);
         communityCreator.setCreatorPassword(password);
         communityCreatorRepo.save(communityCreator);
-        return communityCreator;
+        return new ApiResponse(true,"succssfully sign up",communityCreator);
     }
 
-    public boolean login(String email, String password) {
+    public ApiResponse login(String email, String password) {
         Optional<CommunityCreator> communityCreator = communityCreatorRepo.findByCreatorEmail(email);
-        if(communityCreator.isPresent()) {
-            return communityCreator.get().getCreatorPassword().equals(password);
+        if(!communityCreator.isPresent()) {
+            return new ApiResponse(false,"there is no such email",null);
         }
-        return false;
+        if(communityCreator.get().getCreatorPassword().equals(password) == false){
+            return new ApiResponse(false,"incorrect password",null);
+        }
+        return new ApiResponse(true,"successfully login",null);
     }
-
 }

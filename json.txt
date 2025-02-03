@@ -1,6 +1,43 @@
+
+email -> must be email format
+password -> a least 6 var
+-----------------------------------------------------------------------------
 http://localhost:8080/api/creator/signup
-{
-    "name": "John Doe",
-    "email": "johndoe@email.com",
-    "password": "mypassword123"
-}
+
+flutter code -> {
+                    "name": "John Doe",
+                    "email": "aikepaung76@gmail.com",
+                    "password": "mypassword123"
+                }
+api response -> {
+                    "success": true,
+                    "message": "succssfully sign up",
+                    "data": {
+                        "communityCreatorId": 1,
+                        "creatorName": "John Doe",
+                        "creatorEmail": "aikepaung76@gmail.com",
+                        "creatorPassword": "mypassword123",
+                        "community": null,
+                        "createClubRequests": null
+                    }
+                }
+
+
+---------------------------------------------------------------------------------
+
+http://localhost:8080/api/creator/login
+
+flutter code -> {
+                    "email": "aikepaung76@gmail.com",
+                    "password": "mypassword123"
+                }
+
+api response -> {
+                    "success": true,
+                    "message": "successfully login",
+                    "data": null
+                }
+
+---------------------------------------------------------------------------------
+
+
