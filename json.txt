@@ -1,0 +1,6 @@
+http://localhost:8080/api/creator/signup
+{
+    "name": "John Doe",
+    "email": "johndoe@email.com",
+    "password": "mypassword123"
+}

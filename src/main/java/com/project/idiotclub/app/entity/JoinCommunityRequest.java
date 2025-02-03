@@ -5,23 +5,19 @@ import lombok.Data;
 
 @Entity
 @Data
-public class JoinClubRequest {
+public class JoinCommunityRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String requestDescription;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "club_id", nullable = false)
-    private MyClub myClub;
-
-    private RequestStatus requestStatus;
-
+    @JoinColumn(name = "community_id",nullable = false)
+    private Community community;
 
 }
-
-
