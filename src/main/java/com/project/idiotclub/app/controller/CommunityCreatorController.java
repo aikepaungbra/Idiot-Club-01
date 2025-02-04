@@ -28,18 +28,18 @@ public class CommunityCreatorController {
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse> signUp(@Valid @RequestBody CommunityCreatorSignUpDto dto) {
 
-          ApiResponse apiResponse =  communityCreatorAuth.signUp(dto.getName(), dto.getEmail(), dto.getPassword()) ;
-          HttpStatus status = apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+          var apiResponse =  communityCreatorAuth.signUp(dto.getName(), dto.getEmail(), dto.getPassword()) ;
+          var status = apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
-//        communityCreatorAuth.signUp(dto.getName(), dto.getEmail(), dto.getPassword());
+
         return ResponseEntity.status(status).body(apiResponse);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody CommunityCreatorSignInDto dto) {
 
-        ApiResponse response = communityCreatorAuth.login(dto.getEmail(), dto.getPassword());
-        HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        var response = communityCreatorAuth.login(dto.getEmail(), dto.getPassword());
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
         return ResponseEntity.status(status).body(response);
     }
@@ -47,8 +47,8 @@ public class CommunityCreatorController {
     @PostMapping("/create")
     public ResponseEntity<?> createCommunity(@Valid @RequestBody CommunityCreateDto dto){
 
-        ApiResponse response = communityCreatorService.createCommunity(dto);
-        HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        var response = communityCreatorService.createCommunity(dto);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
         return ResponseEntity.status(status).body(response);
     }
