@@ -1,5 +1,6 @@
 package com.project.idiotclub.app.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -37,6 +38,7 @@ public class Community {
 
     @OneToOne
     @JoinColumn(name = "community_info_id")
+    @JsonManagedReference
     private CommunityInfo communityInfo;
 
     @OneToMany(mappedBy = "community")

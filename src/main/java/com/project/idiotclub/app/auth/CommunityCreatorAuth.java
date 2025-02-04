@@ -28,10 +28,10 @@ public class CommunityCreatorAuth {
 
     public ApiResponse login(String email, String password) {
         Optional<CommunityCreator> communityCreator = communityCreatorRepo.findByCreatorEmail(email);
-        if(!communityCreator.isPresent()) {
+        if(communityCreator.isEmpty()) {
             return new ApiResponse(false,"there is no such email",null);
         }
-        if(communityCreator.get().getCreatorPassword().equals(password) == false){
+        if(!communityCreator.get().getCreatorPassword().equals(password)){
             return new ApiResponse(false,"incorrect password",null);
         }
         return new ApiResponse(true,"successfully login",null);

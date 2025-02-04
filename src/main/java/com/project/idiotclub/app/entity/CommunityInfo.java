@@ -1,5 +1,6 @@
 package com.project.idiotclub.app.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,9 +13,10 @@ public class CommunityInfo {
     private Long id;
 
     @OneToOne(mappedBy = "communityInfo")
+    @JsonIgnore
     private Community community;
 
-    @Column(name = "club_count",nullable = false)
+    @Column(name = "club_count")
     private int clubCount;
 
 }

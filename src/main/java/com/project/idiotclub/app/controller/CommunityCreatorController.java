@@ -4,6 +4,9 @@ import com.project.idiotclub.app.auth.CommunityCreatorAuth;
 import com.project.idiotclub.app.auth.CommunityCreatorSignInDto;
 import com.project.idiotclub.app.auth.CommunityCreatorSignUpDto;
 import com.project.idiotclub.app.response.ApiResponse;
+import com.project.idiotclub.app.service.CommunityCreatorService;
+import com.project.idiotclub.app.service.CommunityCreatorServiceImpl;
+import com.project.idiotclub.app.util.CommunityCreateDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,13 +22,16 @@ public class CommunityCreatorController {
     @Autowired
     private CommunityCreatorAuth communityCreatorAuth;
 
+    @Autowired
+    private CommunityCreatorService communityCreatorService;
+
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse> signUp(@Valid @RequestBody CommunityCreatorSignUpDto dto) {
 
           ApiResponse apiResponse =  communityCreatorAuth.signUp(dto.getName(), dto.getEmail(), dto.getPassword()) ;
           HttpStatus status = apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
-        communityCreatorAuth.signUp(dto.getName(), dto.getEmail(), dto.getPassword());
+//        communityCreatorAuth.signUp(dto.getName(), dto.getEmail(), dto.getPassword());
         return ResponseEntity.status(status).body(apiResponse);
     }
 
@@ -33,6 +39,15 @@ public class CommunityCreatorController {
     public ResponseEntity<?> login(@Valid @RequestBody CommunityCreatorSignInDto dto) {
 
         ApiResponse response = communityCreatorAuth.login(dto.getEmail(), dto.getPassword());
+        HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createCommunity(@Valid @RequestBody CommunityCreateDto dto){
+
+        ApiResponse response = communityCreatorService.createCommunity(dto);
         HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
         return ResponseEntity.status(status).body(response);

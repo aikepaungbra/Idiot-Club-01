@@ -24,10 +24,10 @@ public class User {
     @Column(name="user_password",updatable = false,nullable = false)
     private String password;
 
-    @Column(name="user_profile_image",updatable = true,nullable = true)
+    @Column(name="user_profile_image")
     private String profile_image;
 
-    @Column(name="user_role",updatable = true,nullable = false)
+    @Column(name="user_role")
     @Enumerated(EnumType.STRING)
     private ClubRole role;
 
@@ -53,11 +53,6 @@ public class User {
     private List<JoinCommunityRequest> joinCommunityRequest;
 
 
-//    public enum Role {
-//
-//        CLUB_LEADER, MEMBER
-//
-//    }
 
 
 
