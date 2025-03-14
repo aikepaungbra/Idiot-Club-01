@@ -1,13 +1,16 @@
-package com.project.idiotclub.app.service;
+package com.project.idiotclub.app.service.creatorservice;
 
 import com.project.idiotclub.app.entity.*;
+import com.project.idiotclub.app.entity.creator.Community;
+import com.project.idiotclub.app.entity.creator.CommunityCreator;
+import com.project.idiotclub.app.entity.creator.CommunityInfo;
 import com.project.idiotclub.app.repo.*;
 import com.project.idiotclub.app.response.ApiResponse;
-import com.project.idiotclub.app.response.CommunityCreateResponseDto;
-import com.project.idiotclub.app.util.CheckForm;
-import com.project.idiotclub.app.util.CommunityCreateDto;
+import com.project.idiotclub.app.util.community.CommunityCreateResponseDto;
+import com.project.idiotclub.app.util.community.CheckForm;
+import com.project.idiotclub.app.util.community.CommunityCreateDto;
+import com.project.idiotclub.app.util.community.DecideNewClubForm;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,6 +27,8 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
     private final JoinCommunityRequestRepo joinCommunityRequestRepo;
     private final UserRepo userRepo;
     private final CommunityMembersRepo communityMembersRepo;
+    private final CreateClubRequestRepo createClubRequestRepo;
+    private final MyClubRepo myClubRepo;
 
     @Override
     public ApiResponse createCommunity(CommunityCreateDto communityCreateDto) {
@@ -72,16 +77,21 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
     }
 
     @Override
-    public ApiResponse checkJoinCommunityRequest(CheckForm checkForm) {
+    public ApiResponse decideJoinCommunityRequest(CheckForm checkForm) {
 
         var request = joinCommunityRequestRepo.findById(checkForm.getJoinCommunityRequestId());
+        var community = communityRepo.findById(checkForm.getCommunityId());
         var user = userRepo.findById(checkForm.getUserId());
         var result = checkForm.getRequestStatus();
         var communityCreator = communityCreatorRepo.findById(checkForm.getCommunityCreatorId());
 
         if(request.isEmpty()){
-            return new ApiResponse(false,"there is no such request",null);
+            return new ApiResponse(false,"there is no such request id",null);
         }
+        if(community.isEmpty()){
+            return new ApiResponse(false,"there is no such community id",null);
+        }
+
         if(user.isEmpty()){
             return new ApiResponse(false,"there is no such user",null);
         }
@@ -108,6 +118,55 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
 
         }
         return null;
+    }
+
+    @Override
+    public ApiResponse decideCreateNewClubRequest(DecideNewClubForm form) {
+
+        var communityCreator = communityCreatorRepo.findById(form.getCreatorId()).orElse(null);
+        if (communityCreator == null) {
+            return new ApiResponse(false, "Invalid Community Creator ID", null);
+        }
+
+        var community = communityRepo.findById(form.getCommunityId()).orElse(null);
+        if (community == null) {
+            return new ApiResponse(false, "Invalid Community ID", null);
+        }
+
+        var clubRequest = createClubRequestRepo.findById(form.getCreateClubRequestId()).orElse(null);
+        if (clubRequest == null) {
+            return new ApiResponse(false, "Club creation request not found", null);
+        }
+
+        if (!clubRequest.getCommunityCreator().equals(communityCreator) || !clubRequest.getCommunity().equals(community)) {
+            return new ApiResponse(false, "This request does not belong to the given community or creator", null);
+        }
+
+        var result = form.getRequestStatus();
+        clubRequest.setStatus(result);
+        createClubRequestRepo.save(clubRequest);
+
+        if(result == RequestStatus.APPROVED){
+            var newCLub = new MyClub();
+            newCLub.setName(clubRequest.getClubName());
+            newCLub.setDescription(clubRequest.getClubDescription());
+            newCLub.setLogo(clubRequest.getClubLogo());
+            newCLub.setCommunity(community);
+
+            myClubRepo.save(newCLub);
+
+            return new ApiResponse(true, "Club request approved and club created successfully", null);
+
+        }
+
+        if(result == RequestStatus.REJECTED){
+            return new ApiResponse(true, "Club request rejected", null);
+        };
+        if(result == RequestStatus.PENDING){
+            return new ApiResponse(true, "Club request pending", null);
+        }
+
+        return new ApiResponse(true, "Something is wrong", null);
     }
 
 

@@ -1,4 +1,4 @@
-package com.project.idiotclub.app.util;
+package com.project.idiotclub.app.util.member;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

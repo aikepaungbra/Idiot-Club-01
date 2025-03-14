@@ -1,6 +1,6 @@
 package com.project.idiotclub.app.auth;
 
-import com.project.idiotclub.app.entity.CommunityCreator;
+import com.project.idiotclub.app.entity.creator.CommunityCreator;
 import com.project.idiotclub.app.repo.CommunityCreatorRepo;
 import com.project.idiotclub.app.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;

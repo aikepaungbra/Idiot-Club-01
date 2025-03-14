@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserAuth {
+public class UserAuth{
 
     @Autowired
     private UserRepo userRepo;

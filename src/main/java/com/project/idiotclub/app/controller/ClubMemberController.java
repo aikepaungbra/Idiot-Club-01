@@ -3,11 +3,12 @@ package com.project.idiotclub.app.controller;
 import com.project.idiotclub.app.auth.UserAuth;
 import com.project.idiotclub.app.auth.UserAuthSignInDto;
 import com.project.idiotclub.app.auth.UserAuthSignUpDto;
-import com.project.idiotclub.app.service.ClubMemberService;
-import com.project.idiotclub.app.util.JoinCommunityRequestDto;
+import com.project.idiotclub.app.service.memberservice.ClubMemberService;
+import com.project.idiotclub.app.util.member.CreateClubForm;
+import com.project.idiotclub.app.util.member.JoinCommunityRequestDto;
+import com.project.idiotclub.app.util.member.LeaveCommunityForm;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -52,8 +53,21 @@ public class ClubMemberController {
         return ResponseEntity.status(status).body(apiresponse);
     }
 
+    @PostMapping("/leave-community")
+    public ResponseEntity<?> leaveCommunity(@Valid @RequestBody LeaveCommunityForm form){
+        var apiResponse = clubMemberService.leaveCommunity(form);
+        var status = apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
+        return ResponseEntity.status(status).body(apiResponse);
+    }
 
+    @PostMapping("/create-my-club")
+    public ResponseEntity<?> createClub(@Valid @RequestBody CreateClubForm form){
+        var apiResponse = clubMemberService.createClub(form);
+        var status = apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+
+        return ResponseEntity.status(status).body(apiResponse);
+    }
 
 
 

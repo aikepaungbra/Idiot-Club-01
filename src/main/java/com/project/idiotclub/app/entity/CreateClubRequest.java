@@ -1,5 +1,7 @@
 package com.project.idiotclub.app.entity;
 
+import com.project.idiotclub.app.entity.creator.Community;
+import com.project.idiotclub.app.entity.creator.CommunityCreator;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,10 +14,10 @@ public class CreateClubRequest {
     private Long id;
 
     private String clubName;
-    private String aboutTheClub;
+    private String clubDescription;
     private String clubLeaderName;
     private String reasonToCreateClub;
-    private String clubPhoto;
+    private String clubLogo;
 
     private RequestStatus status;
 

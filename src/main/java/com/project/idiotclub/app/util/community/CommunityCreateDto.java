@@ -1,6 +1,5 @@
-package com.project.idiotclub.app.util;
+package com.project.idiotclub.app.util.community;
 
-import com.project.idiotclub.app.entity.CommunityCreator;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

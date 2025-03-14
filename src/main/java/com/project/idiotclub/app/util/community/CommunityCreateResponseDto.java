@@ -1,6 +1,5 @@
-package com.project.idiotclub.app.response;
+package com.project.idiotclub.app.util.community;
 
-import com.project.idiotclub.app.util.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;

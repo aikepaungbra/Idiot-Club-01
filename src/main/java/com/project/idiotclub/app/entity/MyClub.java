@@ -1,5 +1,6 @@
 package com.project.idiotclub.app.entity;
 
+import com.project.idiotclub.app.entity.creator.Community;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,9 +25,6 @@ public class MyClub {
     @OneToMany(mappedBy = "myClub")
     private List<JoinClubRequest> joinClubRequests;
 
-//    @ManyToOne
-//    @JoinColumn(name = "club_leader_id",nullable = false)
-//    private User clubLeader;
 
     @ManyToOne()
     @JoinColumn(name = "community_id")

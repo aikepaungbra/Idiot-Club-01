@@ -1,6 +1,6 @@
 package com.project.idiotclub.app.repo;
 
-import com.project.idiotclub.app.entity.Community;
+import com.project.idiotclub.app.entity.creator.Community;
 import com.project.idiotclub.app.entity.JoinCommunityRequest;
 import com.project.idiotclub.app.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

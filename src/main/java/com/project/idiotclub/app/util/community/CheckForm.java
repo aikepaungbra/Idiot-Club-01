@@ -1,4 +1,4 @@
-package com.project.idiotclub.app.util;
+package com.project.idiotclub.app.util.community;
 
 import com.project.idiotclub.app.entity.RequestStatus;
 import lombok.Data;
@@ -10,5 +10,6 @@ public class CheckForm {
     private Long joinCommunityRequestId;
     private Long userId;
     private Long communityCreatorId;
+    private Long communityId;
 
 }
