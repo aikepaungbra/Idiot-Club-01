@@ -152,8 +152,20 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
             newCLub.setDescription(clubRequest.getClubDescription());
             newCLub.setLogo(clubRequest.getClubLogo());
             newCLub.setCommunity(community);
+            newCLub.setClubLeader(clubRequest.getClubLeader());
 
             myClubRepo.save(newCLub);
+
+            var communityInfo = community.getCommunityInfo();
+            if(communityInfo == null){
+                communityInfo = new CommunityInfo();
+                communityInfo.setCommunity(community);
+                communityInfo.setClubCount(1);
+            }
+            else {
+                communityInfo.setClubCount(communityInfo.getClubCount() + 1);
+            }
+            communityInfoRepo.save(communityInfo);
 
             return new ApiResponse(true, "Club request approved and club created successfully", null);
 
@@ -166,7 +178,7 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
             return new ApiResponse(true, "Club request pending", null);
         }
 
-        return new ApiResponse(true, "Something is wrong", null);
+        return new ApiResponse(true, "Invalid request status", null);
     }
 
 

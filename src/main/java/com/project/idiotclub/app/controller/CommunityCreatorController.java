@@ -7,6 +7,7 @@ import com.project.idiotclub.app.response.ApiResponse;
 import com.project.idiotclub.app.service.creatorservice.CommunityCreatorService;
 import com.project.idiotclub.app.util.community.CheckForm;
 import com.project.idiotclub.app.util.community.CommunityCreateDto;
+import com.project.idiotclub.app.util.community.DecideNewClubForm;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,5 +62,15 @@ public class CommunityCreatorController {
 
         return ResponseEntity.status(status).body(response);
     }
+
+    @PostMapping("decide-new-club-request")
+    public ResponseEntity<?> createNewClubRequestToDecide(@Valid @RequestBody DecideNewClubForm form){
+
+        var response = communityCreatorService.decideCreateNewClubRequest(form);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+
+        return ResponseEntity.status(status).body(response);
+    }
+
 
 }

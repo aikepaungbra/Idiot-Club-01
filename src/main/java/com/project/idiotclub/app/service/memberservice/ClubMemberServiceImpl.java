@@ -1,14 +1,13 @@
 package com.project.idiotclub.app.service.memberservice;
 
-import com.project.idiotclub.app.entity.CreateClubRequest;
-import com.project.idiotclub.app.entity.JoinCommunityRequest;
-import com.project.idiotclub.app.entity.MyClub;
-import com.project.idiotclub.app.entity.RequestStatus;
+import com.project.idiotclub.app.entity.*;
 import com.project.idiotclub.app.repo.*;
 import com.project.idiotclub.app.response.ApiResponse;
 import com.project.idiotclub.app.util.member.CreateClubForm;
+import com.project.idiotclub.app.util.member.JoinClubForm;
 import com.project.idiotclub.app.util.member.JoinCommunityRequestDto;
 import com.project.idiotclub.app.util.member.LeaveCommunityForm;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +22,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
     private final CommunityMembersRepo communityMembersRepo;
     private final MyClubRepo myClubRepo;
     private final CreateClubRequestRepo createClubRequestRepo;
+    private final JoinClubRequestRepo joinClubRequestRepo;
 
     @Override
     public ApiResponse joinCommunity(JoinCommunityRequestDto dto) {
@@ -85,6 +85,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
     }
 
     @Override
+    @Transactional
     public ApiResponse createClub(CreateClubForm form) {
 
         var community = communityRepo.findById(form.getCommunityId()).orElse(null);
@@ -124,6 +125,38 @@ public class ClubMemberServiceImpl implements ClubMemberService {
         return new ApiResponse(true,"Club creation request submitted successfully",null);
     }
 
+    @Override
+    public ApiResponse joinClub(JoinClubForm form) {
+
+        var community = communityRepo.findById(form.getCommunityId()).orElse(null);
+        if(community == null){
+            return new ApiResponse(false,"community is empty",null);
+        }
+
+        var club = myClubRepo.findById(form.getClubId()).orElse(null);
+        if(club == null){
+            return new ApiResponse(false,"club is empty",null);
+        }
+
+        var user = userRepo.findById(form.getUserId()).orElse(null);
+        if(user == null){
+            return new ApiResponse(false,"user is empty",null);
+        }
+
+        var isMember = communityMembersRepo.existsByUserAndCommunity(user,community);
+
+        if(!isMember){
+            return new ApiResponse(false,"you are not member of this community",null);
+        }
+
+        var joinClubRequest = new JoinClubRequest();
+        joinClubRequest.setUser(user);
+        joinClubRequest.setMyClub(club);
+        joinClubRequest.setRequestStatus(RequestStatus.PENDING);
+        joinClubRequestRepo.save(joinClubRequest);
+
+        return new ApiResponse(true,"successfully requested join club",null);
+    }
 
 
 }

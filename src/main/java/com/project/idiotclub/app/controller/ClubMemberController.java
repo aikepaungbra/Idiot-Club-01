@@ -5,6 +5,7 @@ import com.project.idiotclub.app.auth.UserAuthSignInDto;
 import com.project.idiotclub.app.auth.UserAuthSignUpDto;
 import com.project.idiotclub.app.service.memberservice.ClubMemberService;
 import com.project.idiotclub.app.util.member.CreateClubForm;
+import com.project.idiotclub.app.util.member.JoinClubForm;
 import com.project.idiotclub.app.util.member.JoinCommunityRequestDto;
 import com.project.idiotclub.app.util.member.LeaveCommunityForm;
 import jakarta.validation.Valid;
@@ -44,7 +45,7 @@ public class ClubMemberController {
         return  ResponseEntity.status(status).body(apiResponse);
     }
 
-    @PostMapping("/joincommunity")
+    @PostMapping("/join-community")
     public ResponseEntity<?> joinCommunity(@Valid @RequestBody JoinCommunityRequestDto dto){
 
         var apiresponse = clubMemberService.joinCommunity(dto);
@@ -64,6 +65,15 @@ public class ClubMemberController {
     @PostMapping("/create-my-club")
     public ResponseEntity<?> createClub(@Valid @RequestBody CreateClubForm form){
         var apiResponse = clubMemberService.createClub(form);
+        var status = apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+
+        return ResponseEntity.status(status).body(apiResponse);
+    }
+
+    @PostMapping("/join-club")
+    public ResponseEntity<?> joinCLub(@Valid @RequestBody JoinClubForm form){
+
+        var apiResponse = clubMemberService.joinClub(form);
         var status = apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
         return ResponseEntity.status(status).body(apiResponse);

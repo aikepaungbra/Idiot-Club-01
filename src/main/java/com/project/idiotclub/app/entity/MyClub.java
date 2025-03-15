@@ -25,7 +25,6 @@ public class MyClub {
     @OneToMany(mappedBy = "myClub")
     private List<JoinClubRequest> joinClubRequests;
 
-
     @ManyToOne()
     @JoinColumn(name = "community_id")
     private Community community;
@@ -36,6 +35,8 @@ public class MyClub {
     @OneToMany(mappedBy = "myClub")
     private List<JoinedClubs> joinedClubs;
 
-
+    @ManyToOne
+    @JoinColumn(name = "club_leader_id", nullable = false)
+    private User clubLeader;
 
 }
