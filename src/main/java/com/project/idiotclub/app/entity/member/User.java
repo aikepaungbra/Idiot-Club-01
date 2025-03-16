@@ -1,5 +1,9 @@
-package com.project.idiotclub.app.entity;
+package com.project.idiotclub.app.entity.member;
 
+import com.project.idiotclub.app.entity.ClubRole;
+import com.project.idiotclub.app.entity.community.CommunityMembers;
+import com.project.idiotclub.app.entity.community.JoinCommunityRequest;
+import com.project.idiotclub.app.entity.leader.Post;
 import jakarta.persistence.*;
 import lombok.Data;
 

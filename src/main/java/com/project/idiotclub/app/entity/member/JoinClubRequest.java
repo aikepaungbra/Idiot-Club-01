@@ -1,5 +1,7 @@
-package com.project.idiotclub.app.entity;
+package com.project.idiotclub.app.entity.member;
 
+import com.project.idiotclub.app.entity.RequestStatus;
+import com.project.idiotclub.app.entity.leader.MyClub;
 import jakarta.persistence.*;
 import lombok.Data;
 

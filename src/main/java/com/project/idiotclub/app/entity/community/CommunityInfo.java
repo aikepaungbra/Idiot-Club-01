@@ -1,4 +1,4 @@
-package com.project.idiotclub.app.entity.creator;
+package com.project.idiotclub.app.entity.community;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

@@ -2,8 +2,8 @@ package com.project.idiotclub.app.auth;
 
 
 import com.project.idiotclub.app.entity.ClubRole;
-import com.project.idiotclub.app.entity.User;
-import com.project.idiotclub.app.repo.UserRepo;
+import com.project.idiotclub.app.entity.member.User;
+import com.project.idiotclub.app.repo.member.UserRepo;
 import com.project.idiotclub.app.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

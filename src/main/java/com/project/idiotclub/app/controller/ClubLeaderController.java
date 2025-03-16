@@ -1,6 +1,7 @@
 package com.project.idiotclub.app.controller;
 
 import com.project.idiotclub.app.service.leaderservice.ClubLeaderService;
+import com.project.idiotclub.app.util.clubleader.AnnouncementForm;
 import com.project.idiotclub.app.util.clubleader.NewJoinClubRequestDecideForm;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,15 @@ public class ClubLeaderController {
         var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
         return  ResponseEntity.status(status).body(response);
+    }
+
+    @PostMapping("/make-post")
+    public ResponseEntity<?> makeAnnouncement(@RequestBody @Valid AnnouncementForm form) {
+
+        var response = clubLeaderService.makeAnnouncement(form);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+
+        return ResponseEntity.status(status).body(response);
     }
 
 }

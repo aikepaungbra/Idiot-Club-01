@@ -1,9 +1,9 @@
-package com.project.idiotclub.app.entity;
+package com.project.idiotclub.app.entity.leader;
 
+import com.project.idiotclub.app.entity.member.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity

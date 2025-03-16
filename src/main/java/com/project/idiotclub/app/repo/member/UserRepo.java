@@ -1,6 +1,6 @@
-package com.project.idiotclub.app.repo;
+package com.project.idiotclub.app.repo.member;
 
-import com.project.idiotclub.app.entity.User;
+import com.project.idiotclub.app.entity.member.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

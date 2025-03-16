@@ -1,6 +1,6 @@
-package com.project.idiotclub.app.repo;
+package com.project.idiotclub.app.repo.community;
 
-import com.project.idiotclub.app.entity.creator.CommunityInfo;
+import com.project.idiotclub.app.entity.community.CommunityInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

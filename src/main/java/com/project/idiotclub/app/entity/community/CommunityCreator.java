@@ -1,7 +1,7 @@
-package com.project.idiotclub.app.entity.creator;
+package com.project.idiotclub.app.entity.community;
 
 
-import com.project.idiotclub.app.entity.CreateClubRequest;
+import com.project.idiotclub.app.entity.member.CreateClubRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,10 +1,15 @@
 package com.project.idiotclub.app.service.creatorservice;
 
 import com.project.idiotclub.app.entity.*;
-import com.project.idiotclub.app.entity.creator.Community;
-import com.project.idiotclub.app.entity.creator.CommunityCreator;
-import com.project.idiotclub.app.entity.creator.CommunityInfo;
-import com.project.idiotclub.app.repo.*;
+import com.project.idiotclub.app.entity.community.Community;
+import com.project.idiotclub.app.entity.community.CommunityCreator;
+import com.project.idiotclub.app.entity.community.CommunityInfo;
+import com.project.idiotclub.app.entity.community.CommunityMembers;
+import com.project.idiotclub.app.entity.leader.MyClub;
+import com.project.idiotclub.app.repo.community.*;
+import com.project.idiotclub.app.repo.leader.MyClubRepo;
+import com.project.idiotclub.app.repo.member.CreateClubRequestRepo;
+import com.project.idiotclub.app.repo.member.UserRepo;
 import com.project.idiotclub.app.response.ApiResponse;
 import com.project.idiotclub.app.util.community.CommunityCreateResponseDto;
 import com.project.idiotclub.app.util.community.CheckForm;

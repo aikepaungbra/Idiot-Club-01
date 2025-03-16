@@ -1,7 +1,8 @@
-package com.project.idiotclub.app.entity.creator;
+package com.project.idiotclub.app.entity.community;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.project.idiotclub.app.entity.*;
+import com.project.idiotclub.app.entity.leader.MyClub;
+import com.project.idiotclub.app.entity.member.CreateClubRequest;
 import jakarta.persistence.*;
 import lombok.Data;
 

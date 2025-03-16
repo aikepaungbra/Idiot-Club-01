@@ -1,7 +1,16 @@
 package com.project.idiotclub.app.service.memberservice;
 
 import com.project.idiotclub.app.entity.*;
-import com.project.idiotclub.app.repo.*;
+import com.project.idiotclub.app.entity.community.JoinCommunityRequest;
+import com.project.idiotclub.app.entity.member.CreateClubRequest;
+import com.project.idiotclub.app.entity.member.JoinClubRequest;
+import com.project.idiotclub.app.repo.community.CommunityMembersRepo;
+import com.project.idiotclub.app.repo.community.CommunityRepo;
+import com.project.idiotclub.app.repo.community.JoinCommunityRequestRepo;
+import com.project.idiotclub.app.repo.leader.MyClubRepo;
+import com.project.idiotclub.app.repo.member.CreateClubRequestRepo;
+import com.project.idiotclub.app.repo.member.JoinClubRequestRepo;
+import com.project.idiotclub.app.repo.member.UserRepo;
 import com.project.idiotclub.app.response.ApiResponse;
 import com.project.idiotclub.app.util.member.CreateClubForm;
 import com.project.idiotclub.app.util.member.JoinClubForm;
