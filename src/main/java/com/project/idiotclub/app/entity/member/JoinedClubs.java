@@ -1,5 +1,6 @@
 package com.project.idiotclub.app.entity.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.idiotclub.app.entity.ClubRole;
 import com.project.idiotclub.app.entity.leader.MyClub;
 import jakarta.persistence.*;
@@ -15,10 +16,12 @@ public class JoinedClubs {
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
+    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "club_id",nullable = false)
+    @JsonIgnore
     private MyClub myClub;
 
     @Column(name = "membership_role",nullable = false)

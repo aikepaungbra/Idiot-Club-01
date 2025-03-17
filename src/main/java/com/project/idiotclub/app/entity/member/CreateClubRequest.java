@@ -1,5 +1,6 @@
 package com.project.idiotclub.app.entity.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.idiotclub.app.entity.RequestStatus;
 import com.project.idiotclub.app.entity.community.Community;
 import com.project.idiotclub.app.entity.community.CommunityCreator;
@@ -24,14 +25,17 @@ public class CreateClubRequest {
 
     @ManyToOne
     @JoinColumn(name = "club_lader_id")
+    @JsonIgnore
     private User clubLeader;
 
     @ManyToOne
     @JoinColumn(name = "community_creator_id",nullable = false)
+    @JsonIgnore
     private CommunityCreator communityCreator;
 
     @ManyToOne
     @JoinColumn(name = "community_id",nullable = false)
+    @JsonIgnore
     private Community community;
 
 

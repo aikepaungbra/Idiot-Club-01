@@ -1,5 +1,6 @@
 package com.project.idiotclub.app.entity.community;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.idiotclub.app.entity.leader.MyClub;
 import com.project.idiotclub.app.entity.member.CreateClubRequest;
@@ -27,15 +28,19 @@ public class Community {
 
     @OneToOne()
     @JoinColumn(name = "community_creator_id", nullable = false,unique = true)
+    @JsonManagedReference
     private CommunityCreator communityCreator;
 
     @OneToMany(mappedBy = "community")
+    @JsonIgnore
     private List<CommunityMembers> communityMembers;
 
     @OneToMany(mappedBy = "community")
+    @JsonIgnore
     private List<MyClub> myClubs;
 
     @OneToMany(mappedBy = "community")
+    @JsonIgnore
     private List<JoinCommunityRequest> joinCommunityRequests;
 
     @OneToOne
@@ -44,6 +49,7 @@ public class Community {
     private CommunityInfo communityInfo;
 
     @OneToMany(mappedBy = "community")
+    @JsonIgnore
     private List<CreateClubRequest> createClubRequests;
 
 

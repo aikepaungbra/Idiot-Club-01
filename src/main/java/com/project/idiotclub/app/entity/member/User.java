@@ -1,5 +1,6 @@
 package com.project.idiotclub.app.entity.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.idiotclub.app.entity.ClubRole;
 import com.project.idiotclub.app.entity.community.CommunityMembers;
 import com.project.idiotclub.app.entity.community.JoinCommunityRequest;
@@ -36,24 +37,30 @@ public class User {
     private ClubRole role;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Post> posts ;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<CommunityMembers> communityMembers;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<JoinClubRequest> joinClubRequests;
 
 //    @OneToMany(mappedBy = "clubLeader")
 //    private List<MyClub> clubsLed;
 
     @OneToMany(mappedBy = "clubLeader")
+    @JsonIgnore
     private List<CreateClubRequest> createClubRequest;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<JoinedClubs> joinedClubs;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<JoinCommunityRequest> joinCommunityRequest;
 
 

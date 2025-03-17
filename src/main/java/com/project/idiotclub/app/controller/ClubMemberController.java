@@ -3,20 +3,15 @@ package com.project.idiotclub.app.controller;
 import com.project.idiotclub.app.auth.UserAuth;
 import com.project.idiotclub.app.auth.UserAuthSignInDto;
 import com.project.idiotclub.app.auth.UserAuthSignUpDto;
+import com.project.idiotclub.app.response.ApiResponse;
 import com.project.idiotclub.app.service.memberservice.ClubMemberService;
-import com.project.idiotclub.app.util.member.CreateClubForm;
-import com.project.idiotclub.app.util.member.JoinClubForm;
-import com.project.idiotclub.app.util.member.JoinCommunityRequestDto;
-import com.project.idiotclub.app.util.member.LeaveCommunityForm;
+import com.project.idiotclub.app.util.member.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/member")
@@ -77,6 +72,19 @@ public class ClubMemberController {
         var status = apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
         return ResponseEntity.status(status).body(apiResponse);
+    }
+
+    @GetMapping("/club/read-posts")
+    public ResponseEntity<ApiResponse> readPost(
+            @RequestParam Long clubId,
+            @RequestParam Long communityId) {
+
+        var form = new ReadPostForm();
+        form.setClubId(clubId);
+        form.setCommunityId(communityId);
+
+        var response = clubMemberService.readPost(form);
+        return ResponseEntity.status(response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(response);
     }
 
 

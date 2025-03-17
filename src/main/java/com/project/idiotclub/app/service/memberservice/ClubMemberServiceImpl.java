@@ -2,23 +2,24 @@ package com.project.idiotclub.app.service.memberservice;
 
 import com.project.idiotclub.app.entity.*;
 import com.project.idiotclub.app.entity.community.JoinCommunityRequest;
+import com.project.idiotclub.app.entity.leader.Post;
 import com.project.idiotclub.app.entity.member.CreateClubRequest;
 import com.project.idiotclub.app.entity.member.JoinClubRequest;
 import com.project.idiotclub.app.repo.community.CommunityMembersRepo;
 import com.project.idiotclub.app.repo.community.CommunityRepo;
 import com.project.idiotclub.app.repo.community.JoinCommunityRequestRepo;
 import com.project.idiotclub.app.repo.leader.MyClubRepo;
+import com.project.idiotclub.app.repo.leader.PostRepo;
 import com.project.idiotclub.app.repo.member.CreateClubRequestRepo;
 import com.project.idiotclub.app.repo.member.JoinClubRequestRepo;
 import com.project.idiotclub.app.repo.member.UserRepo;
 import com.project.idiotclub.app.response.ApiResponse;
-import com.project.idiotclub.app.util.member.CreateClubForm;
-import com.project.idiotclub.app.util.member.JoinClubForm;
-import com.project.idiotclub.app.util.member.JoinCommunityRequestDto;
-import com.project.idiotclub.app.util.member.LeaveCommunityForm;
+import com.project.idiotclub.app.util.member.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -32,6 +33,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
     private final MyClubRepo myClubRepo;
     private final CreateClubRequestRepo createClubRequestRepo;
     private final JoinClubRequestRepo joinClubRequestRepo;
+    private final PostRepo postRepo;
 
     @Override
     public ApiResponse joinCommunity(JoinCommunityRequestDto dto) {
@@ -165,6 +167,36 @@ public class ClubMemberServiceImpl implements ClubMemberService {
         joinClubRequestRepo.save(joinClubRequest);
 
         return new ApiResponse(true,"successfully requested join club",null);
+    }
+
+    @Override
+    public ApiResponse readPost(ReadPostForm form) {
+
+        if(form.getClubId() == null || form.getClubId() == null){
+            return new ApiResponse(false,"Invalid request. Club ID or Community ID is missing.",null);
+        }
+
+        var club = myClubRepo.findById(form.getClubId()).orElse(null);
+        var community = communityRepo.findById(form.getCommunityId()).orElse(null);
+
+        if(community == null){
+            return new ApiResponse(false,"community not found",null);
+        }
+        if(club == null){
+            return new ApiResponse(false,"club not found",null);
+        }
+        if(!club.getCommunity().equals(community)){
+            return new ApiResponse(false, "This club does not belong to the given community", null);
+        }
+
+        List<Post> posts = postRepo.findByMyClubOrderByCreatedAtDesc(club);
+
+        return new ApiResponse(true,"Posts retrieved successfully",posts);
+    }
+
+    @Override
+    public ApiResponse leaveClub(LeaveClubForm form) {
+        return null;
     }
 
 

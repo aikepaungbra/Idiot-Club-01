@@ -1,6 +1,8 @@
 package com.project.idiotclub.app.entity.community;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.idiotclub.app.entity.member.CreateClubRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,9 +29,11 @@ public class CommunityCreator {
     private String creatorPassword;
 
     @OneToOne(mappedBy = "communityCreator")
+    @JsonBackReference
     private Community community;
 
     @OneToMany(mappedBy = "communityCreator")
+    @JsonIgnore
     private List<CreateClubRequest> createClubRequests;
 
 
