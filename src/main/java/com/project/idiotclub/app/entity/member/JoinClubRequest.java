@@ -24,6 +24,8 @@ public class JoinClubRequest {
     @JsonIgnore
     private MyClub myClub;
 
+    private String reasonToJoin;
+
     private RequestStatus requestStatus;
 
 

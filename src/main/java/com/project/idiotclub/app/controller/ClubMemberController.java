@@ -84,8 +84,21 @@ public class ClubMemberController {
         form.setCommunityId(communityId);
 
         var response = clubMemberService.readPost(form);
-        return ResponseEntity.status(response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(response);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+
+        return ResponseEntity.status(status).body(response);
     }
+
+    @PostMapping("/club/leave-club")
+    public ResponseEntity<ApiResponse> leaveClub(@Valid @RequestBody LeaveClubForm form){
+
+        var response = clubMemberService.leaveClub(form);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+
+        return ResponseEntity.status(status).body(response);
+    }
+
+
 
 
 
