@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+import java.util.List;
+
 @Repository
 public interface CommunityMembersRepo extends JpaRepository<CommunityMembers, Long> {
 
@@ -16,5 +19,8 @@ public interface CommunityMembersRepo extends JpaRepository<CommunityMembers, Lo
     @Modifying
     @Transactional
     void deleteByUserAndCommunity(User user, Community community);
+
+    List<CommunityMembers> findByUser(User user);
+
 }
 

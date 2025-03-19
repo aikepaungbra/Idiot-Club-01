@@ -98,8 +98,54 @@ public class ClubMemberController {
         return ResponseEntity.status(status).body(response);
     }
 
+    @GetMapping("/search-community")
+    public ResponseEntity<ApiResponse> searchCommunity(@RequestParam String name) {
+        var response = clubMemberService.searchCommunity(name);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
 
+    @GetMapping("/view-my-community/{userId}")
+    public ResponseEntity<ApiResponse> viewMyCommunity(@PathVariable Long userId) {
+        var response = clubMemberService.viewMyCommunity(userId);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
 
+    @GetMapping("/view-profile/{userId}")
+    public ResponseEntity<ApiResponse> viewProfile(@PathVariable Long userId) {
+        var response = clubMemberService.viewProfile(userId);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @PutMapping("/edit-profile-photo")
+    public ResponseEntity<ApiResponse> editProfilePhoto(@RequestParam Long userId, @RequestParam String photo) {
+        var response = clubMemberService.editProfile(userId, photo);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @GetMapping("/view-club-details")
+    public ResponseEntity<ApiResponse> viewClubDetails(@RequestParam Long userId, @RequestParam Long clubId) {
+        var response = clubMemberService.viewClubDetails(userId, clubId);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @GetMapping("/view-club-members/{clubId}")
+    public ResponseEntity<ApiResponse> viewClubMembers(@PathVariable Long clubId) {
+        var response = clubMemberService.viewCLubMembers(clubId);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @GetMapping("/view-joined-clubs")
+    public ResponseEntity<ApiResponse> viewJoinedClub(@RequestParam Long userId, @RequestParam Long communityId) {
+        var response = clubMemberService.viewJoinedClub(userId, communityId);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
 
 
 }

@@ -18,4 +18,20 @@ public interface ClubMemberService {
 
     ApiResponse leaveClub(LeaveClubForm form);
 
+    ApiResponse searchCommunity(String name);
+
+    ApiResponse viewMyCommunity(Long userId);
+
+    ApiResponse viewProfile(Long userId);
+
+    ApiResponse editProfile(Long userId,String photo);
+
+    ApiResponse viewClubDetails(Long userId,Long clubId);
+
+    ApiResponse viewCLubMembers(Long clubId);
+
+    ApiResponse viewJoinedClub(Long userId,Long communityId);
+
+    ApiResponse searchClub(Long communityId,String clubName);
+
 }
