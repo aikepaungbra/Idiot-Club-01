@@ -34,4 +34,8 @@ public interface ClubMemberService {
 
     ApiResponse searchClub(Long communityId,String clubName);
 
+    ApiResponse viewClub(Long clubId);
+
+    ApiResponse viewAllCommunities();
+
 }

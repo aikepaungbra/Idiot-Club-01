@@ -147,5 +147,26 @@ public class ClubMemberController {
         return ResponseEntity.status(status).body(response);
     }
 
+    @GetMapping("/search-club")
+    public ResponseEntity<ApiResponse> searchClub(@RequestParam Long communityId, @RequestParam String clubName) {
+        var response = clubMemberService.searchClub(communityId, clubName);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @GetMapping("/view-club")
+    public ResponseEntity<ApiResponse> viewClub(@RequestParam Long clubId) {
+        var response = clubMemberService.viewClub(clubId);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @GetMapping("/view-all-communities")
+    public ResponseEntity<ApiResponse> viewAllCommunities() {
+        var response = clubMemberService.viewAllCommunities();
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
 
 }

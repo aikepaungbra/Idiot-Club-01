@@ -9,17 +9,20 @@ import com.project.idiotclub.app.entity.leader.MyClub;
 import com.project.idiotclub.app.repo.community.*;
 import com.project.idiotclub.app.repo.leader.MyClubRepo;
 import com.project.idiotclub.app.repo.member.CreateClubRequestRepo;
+import com.project.idiotclub.app.repo.member.JoinedClubsRepo;
 import com.project.idiotclub.app.repo.member.UserRepo;
 import com.project.idiotclub.app.response.ApiResponse;
-import com.project.idiotclub.app.util.community.CommunityCreateResponseDto;
-import com.project.idiotclub.app.util.community.CheckForm;
-import com.project.idiotclub.app.util.community.CommunityCreateDto;
-import com.project.idiotclub.app.util.community.DecideNewClubForm;
+import com.project.idiotclub.app.util.community.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +37,7 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
     private final CommunityMembersRepo communityMembersRepo;
     private final CreateClubRequestRepo createClubRequestRepo;
     private final MyClubRepo myClubRepo;
+    private final JoinedClubsRepo joinedClubsRepo;
 
     @Override
     public ApiResponse createCommunity(CommunityCreateDto communityCreateDto) {
@@ -184,6 +188,148 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
         }
 
         return new ApiResponse(true, "Invalid request status", null);
+    }
+
+    @Override
+    @Transactional
+    public ApiResponse editCommunityDetails(EditCommunityDetailsForm form) {
+
+        if (form.getCommunityId() == null || form.getLeaderId() == null ||
+                form.getNewCommunityName() == null || form.getNewCommunityDescription() == null || form.getNewCommunityLogo() == null) {
+            return new ApiResponse(false, "Invalid request. All fields are required.", null);
+        }
+
+        var community = communityRepo.findById(form.getCommunityId()).orElse(null);
+        if (community == null) {
+            return new ApiResponse(false, "Community not found", null);
+        }
+
+        var leader = userRepo.findById(form.getLeaderId()).orElse(null);
+        if (leader == null) {
+            return new ApiResponse(false, "Community creator not found", null);
+        }
+
+        if (community.getCommunityCreator().getCommunityCreatorId()!=(leader.getId())) {
+            return new ApiResponse(false, "Only the community creator can edit this community", null);
+        }
+
+        community.setCommunityName(form.getNewCommunityName());
+        community.setDescription(form.getNewCommunityDescription());
+        community.setImage(form.getNewCommunityLogo());
+        communityRepo.save(community);
+
+        return new ApiResponse(true, "Community details updated successfully", community);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ApiResponse viewNewClubRequestDetails(Long communityId, Long createClubRequestId) {
+
+        if (communityId == null || createClubRequestId == null) {
+            return new ApiResponse(false, "Invalid request. Community ID and Request ID are required.", null);
+        }
+
+        var community = communityRepo.findById(communityId).orElse(null);
+        if (community == null) {
+            return new ApiResponse(false, "Community not found", null);
+        }
+
+        var createClubRequest = createClubRequestRepo.findById(createClubRequestId).orElse(null);
+        if (createClubRequest == null) {
+            return new ApiResponse(false, "Create club request not found", null);
+        }
+
+        if (!createClubRequest.getCommunity().equals(community)) {
+            return new ApiResponse(false, "This request does not belong to the specified community", null);
+        }
+
+        Map<String, Object> clubRequestDetails = new HashMap<>();
+        clubRequestDetails.put("clubName", createClubRequest.getClubName());
+        clubRequestDetails.put("clubDescription", createClubRequest.getClubDescription());
+        clubRequestDetails.put("clubLeaderName", createClubRequest.getClubLeaderName());
+        clubRequestDetails.put("reasonToCreateClub", createClubRequest.getReasonToCreateClub());
+        clubRequestDetails.put("clubLogo", createClubRequest.getClubLogo());
+        clubRequestDetails.put("status", createClubRequest.getStatus().toString());
+
+
+        return new ApiResponse(true, "Create club request details retrieved successfully", clubRequestDetails);
+
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ApiResponse viewOwnProfile(Long communityCreatorId) {
+
+        if(communityCreatorId == null){
+            return new ApiResponse(false, "Invalid request. Community Creator ID is required.", null);
+        }
+
+        var communityCreator = communityCreatorRepo.findById(communityCreatorId).orElse(null);
+        if (communityCreator == null) {
+            return new ApiResponse(false, "Community Creator not found", null);
+        }
+
+        Map<String, Object> profileDetails = new HashMap<>();
+        profileDetails.put("creatorId", communityCreator.getCommunityCreatorId());
+        profileDetails.put("creatorName", communityCreator.getCreatorName());
+        profileDetails.put("creatorEmail", communityCreator.getCreatorEmail());
+        profileDetails.put("photo",communityCreator.getCreatorPhoto());
+
+        return new ApiResponse(true, "Community Creator profile retrieved successfully", profileDetails);
+    }
+
+    @Override
+    @Transactional
+    public ApiResponse editProfile(Long creatorId, String photo) {
+
+        if (creatorId == null || photo == null || photo.trim().isEmpty()) {
+            return new ApiResponse(false, "Invalid request. Creator ID and photo are required.", null);
+        }
+
+        var communityCreator = communityCreatorRepo.findById(creatorId).orElse(null);
+        if (communityCreator == null) {
+            return new ApiResponse(false, "Community Creator not found", null);
+        }
+        communityCreator.setCreatorPhoto(photo);
+        communityCreatorRepo.save(communityCreator);
+        return new ApiResponse(true, "Profile photo updated successfully", communityCreator);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ApiResponse viewClubs(Long communityId) {
+
+        if (communityId == null) {
+            return new ApiResponse(false, "Invalid request. Community ID is required.", null);
+        }
+
+        var community = communityRepo.findById(communityId).orElse(null);
+        if (community == null) {
+            return new ApiResponse(false, "Community not found", null);
+        }
+
+        List<Map<String, Object>> clubs = myClubRepo.findByCommunity(community)
+                .stream()
+                .map(club -> {
+                    Map<String, Object> clubInfo = new HashMap<>();
+                    clubInfo.put("clubId", club.getId());
+                    clubInfo.put("clubName", club.getName());
+                    clubInfo.put("clubDescription", club.getDescription());
+                    clubInfo.put("clubLogo", club.getLogo());
+
+                    int totalMembers = joinedClubsRepo.countByMyClub(club);
+                    clubInfo.put("totalMembers", totalMembers);
+
+                    return clubInfo;
+                })
+                .collect(Collectors.toList());
+
+        if (clubs.isEmpty()) {
+            return new ApiResponse(false, "No clubs available in this community", null);
+        }
+
+        return new ApiResponse(true, "Clubs retrieved successfully", clubs);
+
     }
 
 

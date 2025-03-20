@@ -8,6 +8,7 @@ import com.project.idiotclub.app.service.creatorservice.CommunityCreatorService;
 import com.project.idiotclub.app.util.community.CheckForm;
 import com.project.idiotclub.app.util.community.CommunityCreateDto;
 import com.project.idiotclub.app.util.community.DecideNewClubForm;
+import com.project.idiotclub.app.util.community.EditCommunityDetailsForm;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -71,6 +72,43 @@ public class CommunityCreatorController {
 
         return ResponseEntity.status(status).body(response);
     }
+
+    @PutMapping("/edit-community")
+    public ResponseEntity<ApiResponse> editCommunityDetails(@RequestBody @Valid EditCommunityDetailsForm form) {
+        var response = communityCreatorService.editCommunityDetails(form);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @GetMapping("/view-club-request")
+    public ResponseEntity<ApiResponse> viewNewClubRequestDetails(@RequestParam Long communityId, @RequestParam Long createClubRequestId) {
+        var response = communityCreatorService.viewNewClubRequestDetails(communityId, createClubRequestId);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+
+    @GetMapping("/view-profile")
+    public ResponseEntity<ApiResponse> viewOwnProfile(@RequestParam Long communityCreatorId) {
+        var response = communityCreatorService.viewOwnProfile(communityCreatorId);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @GetMapping("/view-clubs")
+    public ResponseEntity<ApiResponse> viewClubs(@RequestParam Long communityId) {
+        var response = communityCreatorService.viewClubs(communityId);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @PutMapping("/edit-profile")
+    public ResponseEntity<ApiResponse> editProfile(@RequestParam Long creatorId, @RequestParam String photo) {
+        var response = communityCreatorService.editProfile(creatorId, photo);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
 
 
 }

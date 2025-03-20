@@ -102,4 +102,5 @@ public class ClubLeaderController {
         return ResponseEntity.status(status).body(response);
     }
 
+
 }

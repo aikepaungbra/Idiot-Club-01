@@ -456,11 +456,87 @@ public class ClubMemberServiceImpl implements ClubMemberService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ApiResponse searchClub(Long communityId, String clubName) {
 
+        if (communityId == null || clubName == null || clubName.trim().isEmpty()) {
+            return new ApiResponse(false, "Invalid request. Community ID and Club Name are required.", null);
+        }
+
+        var community = communityRepo.findById(communityId).orElse(null);
+        if (community == null) {
+            return new ApiResponse(false, "Community not found", null);
+        }
+
+        List<Map<String, Object>> matchedClubs = myClubRepo.findByCommunityAndNameContainingIgnoreCase(community, clubName)
+                .stream()
+                .map(club -> {
+                    Map<String, Object> clubInfo = new HashMap<>();
+                    clubInfo.put("clubId", club.getId());
+                    clubInfo.put("clubName", club.getName());
+                    clubInfo.put("clubLogo", club.getLogo());
+                    clubInfo.put("clubDescription", club.getDescription());
 
 
-        return null;
+                    int totalMembers = joinedClubsRepo.countByMyClub(club);
+                    clubInfo.put("totalMembers", totalMembers);
+
+                    return clubInfo;
+                })
+                .collect(Collectors.toList());
+
+
+        if (matchedClubs.isEmpty()) {
+            return new ApiResponse(false, "No clubs found matching this name in the community", null);
+        }
+
+        return new ApiResponse(true, "Matching clubs retrieved successfully", matchedClubs);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ApiResponse viewClub(Long clubId) {
+
+        if (clubId == null) {
+            return new ApiResponse(false, "Invalid request. Club ID is required.", null);
+        }
+
+        var club = myClubRepo.findById(clubId).orElse(null);
+        if (club == null) {
+            return new ApiResponse(false, "Club not found", null);
+        }
+
+        Map<String, Object> clubDetails = new HashMap<>();
+        clubDetails.put("clubId", club.getId());
+        clubDetails.put("clubName", club.getName());
+        clubDetails.put("clubLogo", club.getLogo());
+        clubDetails.put("clubDescription", club.getDescription());
+
+
+        return new ApiResponse(true, "Club details retrieved successfully", clubDetails);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ApiResponse viewAllCommunities() {
+
+        List<Map<String, Object>> allCommunities = communityRepo.findAll()
+                .stream()
+                .map(community -> {
+                    Map<String, Object> communityInfo = new HashMap<>();
+                    communityInfo.put("communityId", community.getCommunityId());
+                    communityInfo.put("communityName", community.getCommunityName());
+                    communityInfo.put("description", community.getDescription());
+                    communityInfo.put("image", community.getImage());
+                    return communityInfo;
+                })
+                .collect(Collectors.toList());
+
+        if (allCommunities.isEmpty()) {
+            return new ApiResponse(false, "No communities available", null);
+        }
+
+        return new ApiResponse(true, "All communities retrieved successfully", allCommunities);
     }
 
 

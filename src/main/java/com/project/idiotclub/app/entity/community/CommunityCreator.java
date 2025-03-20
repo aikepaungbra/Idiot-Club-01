@@ -28,6 +28,8 @@ public class CommunityCreator {
     @Column(name = "creator_password", nullable = false)
     private String creatorPassword;
 
+    private String creatorPhoto;
+
     @OneToOne(mappedBy = "communityCreator")
     @JsonBackReference
     private Community community;
