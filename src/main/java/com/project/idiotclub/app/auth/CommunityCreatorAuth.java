@@ -34,6 +34,6 @@ public class CommunityCreatorAuth {
         if(!communityCreator.get().getCreatorPassword().equals(password)){
             return new ApiResponse(false,"incorrect password",null);
         }
-        return new ApiResponse(true,"successfully login",null);
+        return new ApiResponse(true,"successfully login",communityCreator.get());
     }
 }
