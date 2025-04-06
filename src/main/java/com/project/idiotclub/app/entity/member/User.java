@@ -63,5 +63,4 @@ public class User {
     @JsonIgnore
     private List<JoinCommunityRequest> joinCommunityRequest;
 
-
 }

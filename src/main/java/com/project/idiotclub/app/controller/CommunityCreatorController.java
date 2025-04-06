@@ -108,6 +108,15 @@ public class CommunityCreatorController {
         var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
+    
+    @GetMapping("/join-reason/{id}")
+    public ResponseEntity<ApiResponse> viewJoinReason(@PathVariable ("id") Long communityRequestId){
+    	
+    	var response = communityCreatorService.viewJoinReason(communityRequestId);
+    	var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+    	
+    	return ResponseEntity.status(status).body(response);
+    }
 
 
 

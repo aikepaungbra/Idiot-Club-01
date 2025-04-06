@@ -181,13 +181,13 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
         }
 
         if(result == RequestStatus.REJECTED){
-            return new ApiResponse(true, "Club request rejected", null);
+            return new ApiResponse(false, "Club request rejected", null);
         };
         if(result == RequestStatus.PENDING){
-            return new ApiResponse(true, "Club request pending", null);
+            return new ApiResponse(false, "Club request pending", null);
         }
 
-        return new ApiResponse(true, "Invalid request status", null);
+        return new ApiResponse(false, "Invalid request status", null);
     }
 
     @Override
@@ -331,6 +331,21 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
         return new ApiResponse(true, "Clubs retrieved successfully", clubs);
 
     }
+
+	@Override
+	public ApiResponse viewJoinReason(Long joinCommunityRequsetid) {
+		
+		if(joinCommunityRequsetid == null) {
+			return new ApiResponse(false, "Request id is null", null);
+		}
+		
+		var request = joinCommunityRequestRepo.findById(joinCommunityRequsetid).orElse(null);
+		if(request == null) {
+			return new ApiResponse(false, "there is no request for this id", joinCommunityRequsetid);
+		}
+		
+		return new ApiResponse(true, "Data retrieved successfully", request.getRequestDescription());
+	}
 
 
 }

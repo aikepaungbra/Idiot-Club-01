@@ -24,5 +24,7 @@ public interface CommunityCreatorService {
      ApiResponse editProfile(Long creatorId,String photo);
 
      ApiResponse viewClubs(Long communityId);
+     
+     ApiResponse viewJoinReason(Long joinCommunityRequsetid);
 
 }

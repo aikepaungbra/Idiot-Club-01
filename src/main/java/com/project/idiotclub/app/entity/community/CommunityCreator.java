@@ -30,8 +30,8 @@ public class CommunityCreator {
 
     private String creatorPhoto;
 
-    @OneToOne(mappedBy = "communityCreator")
     @JsonBackReference
+    @OneToOne(mappedBy = "communityCreator")
     private Community community;
 
     @OneToMany(mappedBy = "communityCreator")
