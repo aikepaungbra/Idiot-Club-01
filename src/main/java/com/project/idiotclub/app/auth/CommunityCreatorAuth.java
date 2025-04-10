@@ -1,5 +1,6 @@
 package com.project.idiotclub.app.auth;
 
+import com.project.idiotclub.app.auth.dto.LoginOutputDto;
 import com.project.idiotclub.app.entity.community.CommunityCreator;
 import com.project.idiotclub.app.repo.community.CommunityCreatorRepo;
 import com.project.idiotclub.app.response.ApiResponse;
@@ -23,7 +24,18 @@ public class CommunityCreatorAuth {
         communityCreator.setCreatorName(name);
         communityCreator.setCreatorPassword(password);
         communityCreatorRepo.save(communityCreator);
-        return new ApiResponse(true,"succssfully sign up",communityCreator);
+        
+        LoginOutputDto loginOutputDto = new LoginOutputDto(
+        		communityCreator.getCommunityCreatorId(),
+        		communityCreator.getCreatorName(),
+        		communityCreator.getCreatorEmail(),
+        		communityCreator.getCreatorPassword(),
+        		communityCreator.getCreatorPhoto(),
+        		communityCreator.getCommunity(),
+        		false);
+
+        
+        return new ApiResponse(true,"succssfully sign up",loginOutputDto);
     }
 
     public ApiResponse login(String email, String password) {
@@ -34,6 +46,18 @@ public class CommunityCreatorAuth {
         if(!communityCreator.get().getCreatorPassword().equals(password)){
             return new ApiResponse(false,"incorrect password",null);
         }
-        return new ApiResponse(true,"successfully login",communityCreator.get());
+        
+        boolean hasCommunity = communityCreator.get().getCommunity() != null;
+        
+        LoginOutputDto loginOutputDto = new LoginOutputDto(
+        		communityCreator.get().getCommunityCreatorId(),
+        		communityCreator.get().getCreatorName(),
+        		communityCreator.get().getCreatorEmail(),
+        		communityCreator.get().getCreatorPassword(),
+        		communityCreator.get().getCreatorPhoto(),
+        		communityCreator.get().getCommunity(),
+        		hasCommunity);
+        
+        return new ApiResponse(true,"successfully login",loginOutputDto);
     }
 }

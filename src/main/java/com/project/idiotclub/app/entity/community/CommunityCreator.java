@@ -28,10 +28,11 @@ public class CommunityCreator {
     @Column(name = "creator_password", nullable = false)
     private String creatorPassword;
 
+    @Lob
     private String creatorPhoto;
 
-    @JsonBackReference
     @OneToOne(mappedBy = "communityCreator")
+    @JsonBackReference
     private Community community;
 
     @OneToMany(mappedBy = "communityCreator")

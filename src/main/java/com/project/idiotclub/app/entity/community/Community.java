@@ -21,8 +21,11 @@ public class Community {
     private String communityName;
     @Column(name = "description",nullable = false,updatable = true)
     private String description;
+    
     @Column(name = "community_image",nullable = false,updatable = true)
+    @Lob
     private String image;
+    
     @Column(name = "craete_at")
     private LocalDateTime createTime;
 

@@ -23,7 +23,9 @@ public class MyClub {
     private String name;
     @Column(name = "club_description")
     private String description;
+    
     @Column(name = "club_logo")
+    @Lob
     private String logo;
 
     @OneToMany(mappedBy = "myClub")
