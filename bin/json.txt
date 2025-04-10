@@ -1,0 +1,109 @@
+
+email -> must be email format
+password -> a least 6 var
+-----------------------------------------------------------------------------
+http://localhost:8080/api/creator/signup
+
+flutter code -> {
+                    "name": "John Doe",
+                    "email": "aikepaung76@gmail.com",
+                    "password": "mypassword123"
+                }
+api response -> {
+                    "success": true,
+                    "message": "succssfully sign up",
+                    "data": {
+                        "communityCreatorId": 1,
+                        "creatorName": "John Doe",
+                        "creatorEmail": "aikepaung76@gmail.com",
+                        "creatorPassword": "mypassword123",
+                        "community": null,
+                        "createClubRequests": null
+                    }
+                }
+
+
+---------------------------------------------------------------------------------
+
+http://localhost:8080/api/creator/login
+
+flutter code -> {
+                    "email": "aikepaung76@gmail.com",
+                    "password": "mypassword123"
+                }
+
+api response -> {
+                    "success": true,
+                    "message": "successfully login",
+                    "data": null
+                }
+
+---------------------------------------------------------------------------------
+
+http://localhost:8080/api/member/signup
+
+flutter code -> {
+                    "name": "John Doe",
+                    "email": "aikepaung76@gmail.com",
+                    "password": "mypassword123"
+                }
+
+api response -> {
+                    "success": true,
+                    "message": "successfully sign up",
+                    "data": {
+                        "id": 1,
+                        "name": "John Doe",
+                        "email": "aikepaung76@gmail.com",
+                        "password": "mypassword123",
+                        "profile_image": null,
+                        "role": "MEMBER",
+                        "posts": null,
+                        "communityMembers": null,
+                        "joinClubRequests": null,
+                        "createClubRequest": null,
+                        "joinedClubs": null,
+                        "joinCommunityRequest": null
+                    }
+                }
+
+---------------------------------------------------------------------------------
+
+http://localhost:8080/api/member/login
+
+flutter code -> {
+                    "email": "aikepaung76@gmail.com",
+                    "password": "mypassword123"
+                }
+
+api response -> {
+                    "success": true,
+                    "message": "successfully login",
+                    "data": {
+                        "id": 1,
+                        "name": "John Doe",
+                        "email": "aikepaung76@gmail.com",
+                        "password": "mypassword123",
+                        "profile_image": null,
+                        "role": "MEMBER",
+                        "posts": [],
+                        "communityMembers": [],
+                        "joinClubRequests": [],
+                        "createClubRequest": [],
+                        "joinedClubs": [],
+                        "joinCommunityRequest": []
+                    }
+                }
+
+---------------------------------------------------------------------------------
+
+
+
+flutter code ->
+api response ->
+
+
+
+---------------------------------------------------------------------------------
+
+
