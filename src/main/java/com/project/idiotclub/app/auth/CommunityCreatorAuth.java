@@ -25,15 +25,15 @@ public class CommunityCreatorAuth {
         communityCreator.setCreatorPassword(password);
         communityCreatorRepo.save(communityCreator);
         
-        LoginOutputDto loginOutputDto = new LoginOutputDto(
-        		communityCreator.getCommunityCreatorId(),
-        		communityCreator.getCreatorName(),
-        		communityCreator.getCreatorEmail(),
-        		communityCreator.getCreatorPassword(),
-        		communityCreator.getCreatorPhoto(),
-        		communityCreator.getCommunity(),
-        		false);
-
+        LoginOutputDto loginOutputDto = new LoginOutputDto();
+        loginOutputDto.setCommunityCreatorId(communityCreator.getCommunityCreatorId());
+        loginOutputDto.setCreatorName(communityCreator.getCreatorName());
+        loginOutputDto.setCreatorEmail(communityCreator.getCreatorEmail());
+        loginOutputDto.setCreatorPassword(communityCreator.getCreatorPassword());
+        loginOutputDto.setCreatorPhoto(communityCreator.getCreatorPhoto());
+        loginOutputDto.setCommunity(communityCreator.getCommunity());
+        loginOutputDto.setHasCommunity(false);
+        
         
         return new ApiResponse(true,"succssfully sign up",loginOutputDto);
     }
@@ -49,14 +49,14 @@ public class CommunityCreatorAuth {
         
         boolean hasCommunity = communityCreator.get().getCommunity() != null;
         
-        LoginOutputDto loginOutputDto = new LoginOutputDto(
-        		communityCreator.get().getCommunityCreatorId(),
-        		communityCreator.get().getCreatorName(),
-        		communityCreator.get().getCreatorEmail(),
-        		communityCreator.get().getCreatorPassword(),
-        		communityCreator.get().getCreatorPhoto(),
-        		communityCreator.get().getCommunity(),
-        		hasCommunity);
+        LoginOutputDto loginOutputDto = new LoginOutputDto();
+        loginOutputDto.setCommunityCreatorId(communityCreator.get().getCommunityCreatorId());
+        loginOutputDto.setCreatorName(communityCreator.get().getCreatorName());
+        loginOutputDto.setCreatorEmail(communityCreator.get().getCreatorEmail());
+        loginOutputDto.setCreatorPassword(communityCreator.get().getCreatorPassword());
+        loginOutputDto.setCreatorPhoto(communityCreator.get().getCreatorPhoto());
+        loginOutputDto.setCommunity(communityCreator.get().getCommunity());
+        loginOutputDto.setHasCommunity(hasCommunity);
         
         return new ApiResponse(true,"successfully login",loginOutputDto);
     }
