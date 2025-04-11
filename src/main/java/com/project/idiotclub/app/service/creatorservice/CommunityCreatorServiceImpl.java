@@ -395,6 +395,7 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
 			dto.setUserId(request.getUser().getId());
 			dto.setUserName(request.getUser().getName());
 			dto.setUserPhoto(request.getUser().getProfile_image());
+			dto.setJoinCommunityRequestId(request.getId());
 			return dto;
 		}).collect(Collectors.toList());	
 			
