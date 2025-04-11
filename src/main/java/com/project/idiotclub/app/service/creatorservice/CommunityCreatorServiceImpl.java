@@ -194,8 +194,7 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
             }
             communityInfoRepo.save(communityInfo);
             
-            
-
+       
             return new ApiResponse(true, "Club request approved and club created successfully", null);
 
         }

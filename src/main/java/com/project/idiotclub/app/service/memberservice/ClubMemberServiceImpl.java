@@ -18,10 +18,10 @@ import com.project.idiotclub.app.repo.member.UserRepo;
 import com.project.idiotclub.app.response.ApiResponse;
 import com.project.idiotclub.app.util.member.*;
 import lombok.AllArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -286,15 +286,26 @@ public class ClubMemberServiceImpl implements ClubMemberService {
         if(user == null){
             return new ApiResponse(false, "User not found", null);
         }
+        
+
 
         List<Map<String, Object>> communities = communityMembersRepo.findByUser(user)
                 .stream()
                 .map(member -> {
-                    Map<String, Object> communityInfo = new HashMap<>();
+                	
+                	var commuity = member.getCommunity();
+                	
+                	
+                	boolean isLeader = myClubRepo.existsByClubLeaderAndCommunity(user, commuity);                	
+                	 
+                	Map<String, Object> communityInfo = new HashMap<>();
+                   
                     communityInfo.put("communityId", member.getCommunity().getCommunityId());
                     communityInfo.put("communityName", member.getCommunity().getCommunityName());
                     communityInfo.put("description", member.getCommunity().getDescription());
                     communityInfo.put("image", member.getCommunity().getImage());
+                    
+                    communityInfo.put("isLeader", isLeader);
                     return communityInfo;
                 })
                 .collect(Collectors.toList());
