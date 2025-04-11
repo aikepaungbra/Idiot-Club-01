@@ -112,20 +112,34 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
         }
 
         if(result.equals(RequestStatus.REJECTED)){
+        	
+        	JoinCommunityRequest joinRequest = request.get();   
+        	joinRequest.setStatus(RequestStatus.REJECTED);
+        	joinCommunityRequestRepo.save(joinRequest);
+        	
             joinCommunityRequestRepo.deleteById(checkForm.getJoinCommunityRequestId());
             return new ApiResponse(false,"you got rejected",null);
         }
 
         if(result.equals(RequestStatus.PENDING)){
+        	
             return new ApiResponse(false,"you are still waiting for approval",null);
         }
 
         if(result.equals(RequestStatus.APPROVED)){
+        	
+        	JoinCommunityRequest joinRequest = request.get();
+        	
+        	joinRequest.setStatus(RequestStatus.APPROVED);
+            joinCommunityRequestRepo.save(joinRequest);
 
             var member = new CommunityMembers();
             member.setCommunity(request.get().getCommunity());
             member.setUser(user.get());
             communityMembersRepo.save(member);
+            
+            joinCommunityRequestRepo.deleteById(checkForm.getJoinCommunityRequestId());
+            
             return new ApiResponse(true,"you accepted this member request",null);
 
         }
@@ -178,6 +192,8 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
                 communityInfo.setClubCount(communityInfo.getClubCount() + 1);
             }
             communityInfoRepo.save(communityInfo);
+            
+            
 
             return new ApiResponse(true, "Club request approved and club created successfully", null);
 
@@ -358,7 +374,13 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
 			return new ApiResponse(false, "Community id is null", null);
 		}
 		
-		List<JoinCommunityRequest> requests = joinCommunityRequestRepo.findByCommunityId(communityId);
+
+	    Optional<Community> communityOpt = communityRepo.findById(communityId);
+	    if (communityOpt.isEmpty()) {
+	        return new ApiResponse(false, "Community not found", null);
+	    }
+		
+		List<JoinCommunityRequest> requests = joinCommunityRequestRepo.findByCommunity(communityOpt.get());
 		
 		if(requests.isEmpty()) {
 			return new ApiResponse(false, "No join requests found for this community", null);

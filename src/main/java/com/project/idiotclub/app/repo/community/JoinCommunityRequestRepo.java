@@ -14,6 +14,6 @@ public interface JoinCommunityRequestRepo extends JpaRepository<JoinCommunityReq
 
     boolean existsByUserAndCommunity(User user, Community community);
     
-    List<JoinCommunityRequest> findByCommunityId(Long communityId);
+    List<JoinCommunityRequest> findByCommunity(Community community);
     
 }
