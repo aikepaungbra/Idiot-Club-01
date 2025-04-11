@@ -26,5 +26,7 @@ public interface CommunityCreatorService {
      ApiResponse viewClubs(Long communityId);
      
      ApiResponse viewJoinReason(Long joinCommunityRequsetid);
+     
+     ApiResponse viewJoinCommunityRequest(Long communityId);
 
 }

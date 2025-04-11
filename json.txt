@@ -97,13 +97,64 @@ api response -> {
 
 ---------------------------------------------------------------------------------
 
+http://localhost:8080/api/member/join-community
 
-
-flutter code ->
-api response ->
+flutter code -> {
+					"requestDescription": "I would love to join this community and contribute!",
+ 					 "userId": 123,
+  					"communityId": 456
+				}
+api response -> {
+			    "success": true,
+			    "message": "success",
+			    "data": {
+			        "id": 1,
+			        "requestDescription": "hi i want to join this community",
+			        "status": "PENDING"
+			    }
+			
 
 
 
 ---------------------------------------------------------------------------------
+
+http://localhost:8080/api/member/leave-community
+
+flutter code -> {
+				    "communityId": 1,
+				    "userId": 1
+				}
+api response -> {
+				    "success": true,
+				    "message": "successfully leaving this community",
+				    "data": null
+				}
+
+
+
+---------------------------------------------------------------------------------
+
+
+http://localhost:8080/api/member/create-my-club
+
+flutter code -> {
+				    "userId": 1,
+				    "communityId": 1,
+				    "clubName": "My Tennis 2",
+				    "clubDescription": "This is new Tennis club",
+				    "clubLogo": "This is logo",
+				    "reasonToCreateClub": "This is Reason"
+				    
+				}
+api response -> {
+				    "success": true,
+				    "message": "Club creation request submitted successfully",
+				    "data": null
+				}
+
+
+
+---------------------------------------------------------------------------------
+
 
 

@@ -118,6 +118,14 @@ public class CommunityCreatorController {
     	return ResponseEntity.status(status).body(response);
     }
 
+    @GetMapping("/view-join-request")
+    public ResponseEntity<ApiResponse> ViewJoinCommunityRequest(@RequestParam Long communityId){
+    	
+    	var response = communityCreatorService.viewJoinCommunityRequest(communityId);
+    	var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+    	
+    	return ResponseEntity.status(status).body(response);
+    }
 
 
 }

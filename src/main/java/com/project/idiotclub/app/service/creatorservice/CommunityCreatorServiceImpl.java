@@ -5,6 +5,7 @@ import com.project.idiotclub.app.entity.community.Community;
 import com.project.idiotclub.app.entity.community.CommunityCreator;
 import com.project.idiotclub.app.entity.community.CommunityInfo;
 import com.project.idiotclub.app.entity.community.CommunityMembers;
+import com.project.idiotclub.app.entity.community.JoinCommunityRequest;
 import com.project.idiotclub.app.entity.leader.MyClub;
 import com.project.idiotclub.app.repo.community.*;
 import com.project.idiotclub.app.repo.leader.MyClubRepo;
@@ -14,6 +15,8 @@ import com.project.idiotclub.app.repo.member.UserRepo;
 import com.project.idiotclub.app.response.ApiResponse;
 import com.project.idiotclub.app.util.community.*;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.var;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -345,6 +348,31 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
 		}
 		
 		return new ApiResponse(true, "Data retrieved successfully", request.getRequestDescription());
+	}
+
+	@Override
+	public ApiResponse viewJoinCommunityRequest( Long communityId) {
+		
+		
+		if(communityId == null) {
+			return new ApiResponse(false, "Community id is null", null);
+		}
+		
+		List<JoinCommunityRequest> requests = joinCommunityRequestRepo.findByCommunityId(communityId);
+		
+		if(requests.isEmpty()) {
+			return new ApiResponse(false, "No join requests found for this community", null);
+		}
+		
+		List<ViewJoinCommunityRequestOutputForm> result = requests.stream().map(request ->{
+			ViewJoinCommunityRequestOutputForm dto = new ViewJoinCommunityRequestOutputForm();
+			dto.setUserId(request.getUser().getId());
+			dto.setUserName(request.getUser().getName());
+			dto.setUserPhoto(request.getUser().getProfile_image());
+			return dto;
+		}).collect(Collectors.toList());	
+			
+		return new ApiResponse(true, "Join requests retrieved successfully", result);
 	}
 
 
