@@ -4,6 +4,8 @@ import com.project.idiotclub.app.auth.UserAuth;
 import com.project.idiotclub.app.auth.UserAuthSignInDto;
 import com.project.idiotclub.app.auth.UserAuthSignUpDto;
 import com.project.idiotclub.app.response.ApiResponse;
+import com.project.idiotclub.app.service.creatorservice.CommunityCreatorService;
+import com.project.idiotclub.app.service.leaderservice.ClubLeaderService;
 import com.project.idiotclub.app.service.memberservice.ClubMemberService;
 import com.project.idiotclub.app.util.member.*;
 import jakarta.validation.Valid;
@@ -22,6 +24,7 @@ public class ClubMemberController {
 
     private final UserAuth userAuth;
     private final ClubMemberService clubMemberService;
+    private final CommunityCreatorService communityCreatorService;
 
     @PostMapping("signup")
     public ResponseEntity<?> signUp(@Valid @RequestBody UserAuthSignUpDto dto){
@@ -166,6 +169,14 @@ public class ClubMemberController {
         var response = clubMemberService.viewAllCommunities();
         var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
+    }
+    
+    @GetMapping("/view-clubs")
+    public ResponseEntity<ApiResponse> viewAllClubs(@RequestParam Long communityId){
+    	
+    	var response = communityCreatorService.viewClubs(communityId);
+    	var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+    	return ResponseEntity.status(status).body(response);
     }
 
 
