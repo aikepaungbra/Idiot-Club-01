@@ -43,6 +43,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
     private final JoinedClubsRepo joinedClubsRepo;
 
     @Override
+    @Transactional
     public ApiResponse joinCommunity(JoinCommunityRequestDto dto) {
 
         var user = userRepo.findById(dto.getUserId());
@@ -76,6 +77,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
     }
 
     @Override
+    @Transactional
     public ApiResponse leaveCommunity(LeaveCommunityForm form) {
 
         var community = communityRepo.findById(form.getCommunityId()).orElse(null);
@@ -144,6 +146,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
     }
 
     @Override
+    @Transactional
     public ApiResponse joinClub(JoinClubForm form) {
 
         var community = communityRepo.findById(form.getCommunityId()).orElse(null);
@@ -204,6 +207,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
     }
 
     @Override
+    @Transactional
     public ApiResponse leaveClub(LeaveClubForm form) {
 
         if (form.getCommunityId() == null || form.getClubId() == null || form.getUserId() == null) {
@@ -271,6 +275,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ApiResponse viewMyCommunity(Long userId) {
 
         if(userId == null){
@@ -302,6 +307,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ApiResponse viewProfile(Long userId) {
 
         if(userId == null){

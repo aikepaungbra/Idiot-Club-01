@@ -154,6 +154,7 @@ public class ClubLeaderServiceImpl implements ClubLeaderService{
     }
 
     @Override
+    @Transactional
     public ApiResponse removeClubMember(RemoveClubMemberForm form) {
 
         if (form.getLeaderId() == null || form.getClubId() == null || form.getMemberId() == null) {
@@ -190,6 +191,7 @@ public class ClubLeaderServiceImpl implements ClubLeaderService{
     }
 
     @Override
+    @Transactional
     public ApiResponse promoteClubLeader(ChangeLeaderForm form) {
 
         if (form.getCurrentLeaderId() == null || form.getClubId() == null || form.getNewLeaderId() == null) {
@@ -252,7 +254,7 @@ public class ClubLeaderServiceImpl implements ClubLeaderService{
     }
 
     @Override
-    @Transactional()
+    @Transactional
     public ApiResponse editMyClubDescription(EditMyClubDescriptionForm form) {
 
         if(form.getLeaderId() == null || form.getClubId() == null || form.getNewDescription() == null){

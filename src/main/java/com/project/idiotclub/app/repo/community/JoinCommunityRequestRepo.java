@@ -1,5 +1,6 @@
 package com.project.idiotclub.app.repo.community;
 
+import com.project.idiotclub.app.entity.RequestStatus;
 import com.project.idiotclub.app.entity.community.Community;
 import com.project.idiotclub.app.entity.community.JoinCommunityRequest;
 import com.project.idiotclub.app.entity.member.User;
@@ -14,6 +15,8 @@ public interface JoinCommunityRequestRepo extends JpaRepository<JoinCommunityReq
 
     boolean existsByUserAndCommunity(User user, Community community);
     
-    List<JoinCommunityRequest> findByCommunity(Community community);
+//    List<JoinCommunityRequest> findByCommunity(Community community);
+    
+    List<JoinCommunityRequest> findByCommunityAndStatus(Community community, RequestStatus status);
     
 }

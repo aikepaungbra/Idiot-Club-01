@@ -15,7 +15,6 @@ import com.project.idiotclub.app.repo.member.UserRepo;
 import com.project.idiotclub.app.response.ApiResponse;
 import com.project.idiotclub.app.util.community.*;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.var;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +42,7 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
     private final JoinedClubsRepo joinedClubsRepo;
 
     @Override
+    @Transactional
     public ApiResponse createCommunity(CommunityCreateDto communityCreateDto) {
 
         Optional<CommunityCreator> communityCreator = communityCreatorRepo.findById(communityCreateDto.getCommunityCreatorId());
@@ -89,6 +89,7 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
     }
 
     @Override
+    @Transactional
     public ApiResponse decideJoinCommunityRequest(CheckForm checkForm) {
 
         var request = joinCommunityRequestRepo.findById(checkForm.getJoinCommunityRequestId());
@@ -137,8 +138,7 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
             member.setCommunity(request.get().getCommunity());
             member.setUser(user.get());
             communityMembersRepo.save(member);
-            
-            joinCommunityRequestRepo.deleteById(checkForm.getJoinCommunityRequestId());
+           
             
             return new ApiResponse(true,"you accepted this member request",null);
 
@@ -147,6 +147,7 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
     }
 
     @Override
+    @Transactional
     public ApiResponse decideCreateNewClubRequest(DecideNewClubForm form) {
 
         var communityCreator = communityCreatorRepo.findById(form.getCreatorId()).orElse(null);
@@ -200,6 +201,8 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
         }
 
         if(result == RequestStatus.REJECTED){
+        	
+        	createClubRequestRepo.deleteById(form.getCreateClubRequestId());        	
             return new ApiResponse(false, "Club request rejected", null);
         };
         if(result == RequestStatus.PENDING){
@@ -352,6 +355,7 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
     }
 
 	@Override
+	@Transactional(readOnly = true)
 	public ApiResponse viewJoinReason(Long joinCommunityRequsetid) {
 		
 		if(joinCommunityRequsetid == null) {
@@ -367,7 +371,8 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
 	}
 
 	@Override
-	public ApiResponse viewJoinCommunityRequest( Long communityId) {
+	@Transactional(readOnly = true)
+	public ApiResponse viewJoinCommunityRequest(Long communityId) {
 		
 		
 		if(communityId == null) {
@@ -380,10 +385,10 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
 	        return new ApiResponse(false, "Community not found", null);
 	    }
 		
-		List<JoinCommunityRequest> requests = joinCommunityRequestRepo.findByCommunity(communityOpt.get());
+		List<JoinCommunityRequest> requests = joinCommunityRequestRepo.findByCommunityAndStatus(communityOpt.get(),RequestStatus.PENDING);
 		
 		if(requests.isEmpty()) {
-			return new ApiResponse(false, "No join requests found for this community", null);
+			return new ApiResponse(false, "No pending join requests found for this community", null);
 		}
 		
 		List<ViewJoinCommunityRequestOutputForm> result = requests.stream().map(request ->{
