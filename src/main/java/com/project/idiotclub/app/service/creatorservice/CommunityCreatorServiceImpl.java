@@ -175,12 +175,23 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
         if (!clubRequest.getCommunityCreator().equals(communityCreator) || !clubRequest.getCommunity().equals(community)) {
             return new ApiResponse(false, "This request does not belong to the given community or creator", null);
         }
+        
+        if (clubRequest.getStatus() == RequestStatus.APPROVED) {
+            return new ApiResponse(false, "This request has already been approved", null);
+        }
+        
+        if (clubRequest.getStatus() == RequestStatus.REJECTED) {
+            return new ApiResponse(false, "This request has already been rejected", null);
+        }
 
         var result = form.getRequestStatus();
-        clubRequest.setStatus(result);
-        createClubRequestRepo.save(clubRequest);
+       
 
         if(result == RequestStatus.APPROVED){
+        	
+        	clubRequest.setStatus(RequestStatus.APPROVED);
+            createClubRequestRepo.save(clubRequest);
+        	
             var newCLub = new MyClub();
             newCLub.setName(clubRequest.getClubName());
             newCLub.setDescription(clubRequest.getClubDescription());
@@ -443,6 +454,12 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
 		
 
 	    return new ApiResponse(true, "Pending club creation requests retrieved successfully", result);
+	}
+
+	@Override
+	public ApiResponse memberCount(Long communityId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
