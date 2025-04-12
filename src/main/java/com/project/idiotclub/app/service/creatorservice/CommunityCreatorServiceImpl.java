@@ -7,6 +7,8 @@ import com.project.idiotclub.app.entity.community.CommunityInfo;
 import com.project.idiotclub.app.entity.community.CommunityMembers;
 import com.project.idiotclub.app.entity.community.JoinCommunityRequest;
 import com.project.idiotclub.app.entity.leader.MyClub;
+import com.project.idiotclub.app.entity.member.CreateClubRequest;
+import com.project.idiotclub.app.entity.member.User;
 import com.project.idiotclub.app.repo.community.*;
 import com.project.idiotclub.app.repo.leader.MyClubRepo;
 import com.project.idiotclub.app.repo.member.CreateClubRequestRepo;
@@ -94,7 +96,6 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
 
         var request = joinCommunityRequestRepo.findById(checkForm.getJoinCommunityRequestId());
         var community = communityRepo.findById(checkForm.getCommunityId());
-        var user = userRepo.findById(checkForm.getUserId());
         var result = checkForm.getRequestStatus();
         var communityCreator = communityCreatorRepo.findById(checkForm.getCommunityCreatorId());
 
@@ -105,16 +106,16 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
             return new ApiResponse(false,"there is no such community id",null);
         }
 
-        if(user.isEmpty()){
-            return new ApiResponse(false,"there is no such user",null);
-        }
         if(communityCreator.isEmpty()){
             return new ApiResponse(false,"there is no such community creator",null);
         }
+        
+        JoinCommunityRequest joinRequest = request.get();
+        User user = joinRequest.getUser();
 
         if(result.equals(RequestStatus.REJECTED)){
         	
-        	JoinCommunityRequest joinRequest = request.get();   
+     
         	joinRequest.setStatus(RequestStatus.REJECTED);
         	joinCommunityRequestRepo.save(joinRequest);
         	
@@ -129,14 +130,13 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
 
         if(result.equals(RequestStatus.APPROVED)){
         	
-        	JoinCommunityRequest joinRequest = request.get();
         	
         	joinRequest.setStatus(RequestStatus.APPROVED);
             joinCommunityRequestRepo.save(joinRequest);
 
             var member = new CommunityMembers();
             member.setCommunity(request.get().getCommunity());
-            member.setUser(user.get());
+            member.setUser(user);
             communityMembersRepo.save(member);
            
             
@@ -400,6 +400,42 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
 		}).collect(Collectors.toList());	
 			
 		return new ApiResponse(true, "Join requests retrieved successfully", result);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ApiResponse viewAllNewClubRequest(Long communityId) {
+		
+		if (communityId == null) {
+	        return new ApiResponse(false, "Community ID is required", null);
+	    }
+		
+		var community = communityRepo.findById(communityId).orElse(null);
+	    if (community == null) {
+	        return new ApiResponse(false, "Community not found", null);
+	    }
+	    
+	    List<CreateClubRequest> pendingRequests = createClubRequestRepo.findByCommunityAndStatus(
+	            community, RequestStatus.PENDING
+	    );
+	    
+	    if (pendingRequests.isEmpty()) {
+	        return new ApiResponse(false, "No pending club creation requests found", null);
+	    }
+	    
+	    List<Map<String, Object>> result = pendingRequests.stream().map(req -> {
+	        Map<String, Object> clubRequest = new HashMap<>();
+	        clubRequest.put("requestId", req.getId());
+	        clubRequest.put("clubName", req.getClubName());
+	        clubRequest.put("clubLeaderName", req.getClubLeaderName());
+	        clubRequest.put("description", req.getClubDescription());
+	        clubRequest.put("reason", req.getReasonToCreateClub());
+	        clubRequest.put("logo", req.getClubLogo());
+	        return clubRequest;
+	    }).collect(Collectors.toList());
+		
+
+	    return new ApiResponse(true, "Pending club creation requests retrieved successfully", result);
 	}
 
 

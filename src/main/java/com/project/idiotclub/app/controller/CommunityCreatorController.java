@@ -126,6 +126,14 @@ public class CommunityCreatorController {
     	
     	return ResponseEntity.status(status).body(response);
     }
+    
+    @GetMapping("/view-all-new-club-request")
+    public ResponseEntity<ApiResponse> viewAllNewClubRequest(@RequestParam Long communityId) {
+    
+    	var response = communityCreatorService.viewAllNewClubRequest(communityId);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
 
 
 }

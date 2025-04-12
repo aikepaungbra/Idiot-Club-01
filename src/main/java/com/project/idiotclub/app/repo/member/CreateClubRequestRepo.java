@@ -13,5 +13,8 @@ public interface CreateClubRequestRepo extends JpaRepository<CreateClubRequest, 
 
 	
 	boolean existsByClubLeaderAndCommunityAndStatusIn(User clubLeader, Community community, List<RequestStatus> statuses);
+
+	List<CreateClubRequest> findByCommunityAndStatus(Community community, RequestStatus status);
 	
+
 }
