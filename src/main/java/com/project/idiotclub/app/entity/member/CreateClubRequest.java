@@ -21,6 +21,7 @@ public class CreateClubRequest {
     private String reasonToCreateClub;
     private String clubLogo;
 
+    @Enumerated(EnumType.STRING)
     private RequestStatus status;
 
     @ManyToOne

@@ -128,7 +128,17 @@ public class ClubMemberServiceImpl implements ClubMemberService {
         if(communityCreator == null){
             return new ApiResponse(false,"This community has no creator assigned",null);
         }
-
+        
+        boolean alreadyRequested = createClubRequestRepo.existsByClubLeaderAndCommunityAndStatusIn(
+        	    user,
+        	    community,
+        	    List.of(RequestStatus.PENDING, RequestStatus.APPROVED)
+        );
+        
+        if (alreadyRequested) {
+            return new ApiResponse(false, "You already have a club request for this community", null);
+        }
+        			
         var clubRequest = new CreateClubRequest();
 
         clubRequest.setClubName(form.getClubName());
