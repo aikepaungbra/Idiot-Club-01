@@ -72,16 +72,16 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
         communityInfoRepo.save(communityInfo);
 
         community.setCommunityInfo(communityInfo);
-        var com = communityRepo.save(community);
+        communityRepo.save(community);
 
         var responseDto = new CommunityCreateResponseDto();
-        responseDto.setCommunityId(com.getCommunityId());
-        responseDto.setCommunityName(com.getCommunityName());
-        responseDto.setDescription(com.getDescription());
-        responseDto.setImage(com.getImage());
-        responseDto.setCreateAt(com.getCreateTime());
-        responseDto.setCreatorName(com.getCommunityCreator().getCreatorName());
-        responseDto.setCreatorEmail(com.getCommunityCreator().getCreatorEmail());
+        responseDto.setCommunityId(community.getCommunityId());
+        responseDto.setCommunityName(community.getCommunityName());
+        responseDto.setDescription(community.getDescription());
+        responseDto.setImage(community.getImage());
+        responseDto.setCreateAt(community.getCreateTime());
+        responseDto.setCreatorName(community.getCommunityCreator().getCreatorName());
+        responseDto.setCreatorEmail(community.getCommunityCreator().getCreatorEmail());
         responseDto.setCommunityInfoId(communityInfo.getId());
         responseDto.setClubCount(communityInfo.getClubCount());
 

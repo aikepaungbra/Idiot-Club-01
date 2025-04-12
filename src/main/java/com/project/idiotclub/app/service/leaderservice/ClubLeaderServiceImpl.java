@@ -392,9 +392,9 @@ public class ClubLeaderServiceImpl implements ClubLeaderService{
 		 result.put("clubName", club.get().getName());
 		 result.put("clubDescription", club.get().getDescription());
 		 result.put("clubLogo", club.get().getLogo());
-		 result.put("memberCount", result);
+		 result.put("memberCount", memberCount);
 		 result.put("clubId", club.get().getId());	
-		 return new ApiResponse(true, "Club retrieved successfully", memberCount);
+		 return new ApiResponse(true, "Club retrieved successfully", result);
 	}
 
 

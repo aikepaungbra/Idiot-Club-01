@@ -104,7 +104,16 @@ public class ClubLeaderController {
     }
     
     @GetMapping("/view-my-club")
-    public ResponseEntity<ApiResponse> viewMyClub(@RequestParam ViewMyCreationClubForm form) {
+    public ResponseEntity<ApiResponse> viewMyClub(
+    		@RequestParam Long leaderId,
+            @RequestParam Long commuityId,
+            @RequestParam Long myClubId) {
+    	
+    	 ViewMyCreationClubForm form = new ViewMyCreationClubForm();
+    	 form.setLeaderId(leaderId);
+    	 form.setCommuityId(commuityId);
+    	 form.setMyClubId(myClubId);
+    	
     	var response = clubLeaderService.viewMyCreationClub(form);
         var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
