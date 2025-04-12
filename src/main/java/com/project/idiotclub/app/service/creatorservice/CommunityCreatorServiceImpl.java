@@ -130,6 +130,9 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
 
         if(result.equals(RequestStatus.APPROVED)){
         	
+        	 if (joinRequest.getStatus() == RequestStatus.APPROVED) {
+        	        return new ApiResponse(false, "This request has already been approved", null);
+        	    }
         	
         	joinRequest.setStatus(RequestStatus.APPROVED);
             joinCommunityRequestRepo.save(joinRequest);
@@ -137,10 +140,14 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
             var member = new CommunityMembers();
             member.setCommunity(request.get().getCommunity());
             member.setUser(user);
-            communityMembersRepo.save(member);
+            
+            boolean alreadyMember = communityMembersRepo.existsByUserAndCommunity(user, community.get());
+            if (!alreadyMember) {
+                communityMembersRepo.save(member);
+            }
            
             
-            return new ApiResponse(true,"you accepted this member request",null);
+            return new ApiResponse(true,"User has been approved and added to the community",null);
 
         }
         return null;

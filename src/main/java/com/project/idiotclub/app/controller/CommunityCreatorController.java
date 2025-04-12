@@ -33,7 +33,6 @@ public class CommunityCreatorController {
           var apiResponse =  communityCreatorAuth.signUp(dto.getName(), dto.getEmail(), dto.getPassword()) ;
           var status = apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
-
         return ResponseEntity.status(status).body(apiResponse);
     }
 

@@ -298,7 +298,6 @@ public class ClubMemberServiceImpl implements ClubMemberService {
         }
         
 
-
         List<Map<String, Object>> communities = communityMembersRepo.findByUser(user)
                 .stream()
                 .map(member -> {
