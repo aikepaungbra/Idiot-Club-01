@@ -120,7 +120,14 @@ public class ClubLeaderController {
     }
     
    
-   
+    @GetMapping("/view-own-post/{leaderId}/{clubId}")
+    public ResponseEntity<ApiResponse> viewOwnPost(@PathVariable Long leaderId, @PathVariable Long clubId) {
+        var response = clubLeaderService.viewMyAnnouncement(leaderId, clubId);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+     }
+    
+    
     
 
 }

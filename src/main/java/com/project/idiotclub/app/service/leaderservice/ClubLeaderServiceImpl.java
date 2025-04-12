@@ -397,5 +397,51 @@ public class ClubLeaderServiceImpl implements ClubLeaderService{
 		 return new ApiResponse(true, "Club retrieved successfully", result);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public ApiResponse viewMyAnnouncement(Long leaderId, Long clubId) {
+		
+		if (leaderId == null || clubId == null) {
+	        return new ApiResponse(false, "Leader ID and Club ID are required", null);
+	    }
+		
+		 var userOpt = userRepo.findById(leaderId);
+		 var clubOpt = myClubRepo.findById(clubId);
+
+		
+		 if (userOpt.isEmpty()) {
+		        return new ApiResponse(false, "Club leader not found", null);
+		 }
+
+		 if (clubOpt.isEmpty()) {
+		        return new ApiResponse(false, "Club not found", null);
+		 }
+		 
+		 var user = userOpt.get();
+		 var club = clubOpt.get();
+		 
+		 if (!club.getClubLeader().equals(user)) {
+		        return new ApiResponse(false, "You are not the leader of this club", null);
+		 }
+		 
+		 List<Post> posts = postRepo.findByUserAndMyClub(user, club);
+		 
+		 if (posts.isEmpty()) {
+		        return new ApiResponse(false, "No announcements found", null);
+		 }
+		 
+		 List<Map<String, Object>> result = posts.stream().map(post -> {
+		        Map<String, Object> postMap = new HashMap<>();
+		        postMap.put("postId", post.getId());
+		        postMap.put("message", post.getMessage());
+		        postMap.put("createdAt", post.getCreatedAt());
+		        return postMap;
+		    }).collect(Collectors.toList());
+
+		
+		
+		 return new ApiResponse(true, "Announcements retrieved successfully", result);
+	}
+
 
 }
