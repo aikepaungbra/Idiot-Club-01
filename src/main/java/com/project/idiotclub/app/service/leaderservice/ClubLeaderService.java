@@ -22,5 +22,7 @@ public interface ClubLeaderService {
     ApiResponse viewReasonToJoin(Long leaderId,Long clubId);
 
     ApiResponse viewClubMembers(Long leaderId,Long clubId);
+    
+    ApiResponse viewMyCreationClub(ViewMyCreationClubForm form);
 
 }

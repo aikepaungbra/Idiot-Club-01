@@ -361,5 +361,41 @@ public class ClubLeaderServiceImpl implements ClubLeaderService{
         return new ApiResponse(true, "Club members retrieved successfully", clubMembers);
     }
 
+	@Override
+	@Transactional(readOnly = true)
+	public ApiResponse viewMyCreationClub(ViewMyCreationClubForm form) {
+	
+		 if (form.getLeaderId() == null || form.getCommuityId() == null) {
+		        return new ApiResponse(false, "Leader ID and Community ID are required", null);
+		   	
+		 }
+		 
+		 var user = userRepo.findById(form.getLeaderId()).orElse(null);
+		 
+		 if (user == null) {
+		        return new ApiResponse(false, "Club leader not found", null);
+		 }
+		 
+		 var community = communityRepo.findById(form.getCommuityId());
+		 if (community == null) {
+		        return new ApiResponse(false, "Community not found", null);
+		 }
+		 
+		 var club = myClubRepo.findById(form.getMyClubId());
+		 if (club == null) {
+		        return new ApiResponse(false, "No club created by this user in the specified community", null);
+		 }
+		 
+		 int memberCount = joinedClubsRepo.countByMyClub(club.get());
+		 
+		 Map<String, Object> result = new HashMap<>();
+		 result.put("clubName", club.get().getName());
+		 result.put("clubDescription", club.get().getDescription());
+		 result.put("clubLogo", club.get().getLogo());
+		 result.put("memberCount", result);
+		 result.put("clubId", club.get().getId());	
+		 return new ApiResponse(true, "Club retrieved successfully", memberCount);
+	}
+
 
 }
