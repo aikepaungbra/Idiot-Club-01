@@ -16,6 +16,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Lob
     private String message;
 
     @ManyToOne
