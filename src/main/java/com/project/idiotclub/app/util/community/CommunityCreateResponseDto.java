@@ -15,6 +15,6 @@ public class CommunityCreateResponseDto {
     private String creatorName;
     private String creatorEmail;
     private Long communityInfoId;
-    private Integer clubCount;
+    private Integer memberCount;
 
 }

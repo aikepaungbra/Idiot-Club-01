@@ -73,7 +73,9 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
 
         community.setCommunityInfo(communityInfo);
         communityRepo.save(community);
-
+        
+        int memberCount = communityMembersRepo.countByCommunity(community);
+        		
         var responseDto = new CommunityCreateResponseDto();
         responseDto.setCommunityId(community.getCommunityId());
         responseDto.setCommunityName(community.getCommunityName());
@@ -83,8 +85,7 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
         responseDto.setCreatorName(community.getCommunityCreator().getCreatorName());
         responseDto.setCreatorEmail(community.getCommunityCreator().getCreatorEmail());
         responseDto.setCommunityInfoId(communityInfo.getId());
-        responseDto.setClubCount(communityInfo.getClubCount());
-
+        responseDto.setMemberCount(memberCount);
 
         return new ApiResponse(true,"successfully created",responseDto);
 

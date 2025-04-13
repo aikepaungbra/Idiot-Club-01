@@ -5,6 +5,7 @@ import com.project.idiotclub.app.entity.community.Community;
 import com.project.idiotclub.app.entity.community.CommunityCreator;
 import com.project.idiotclub.app.entity.community.CommunityInfo;
 import com.project.idiotclub.app.repo.community.CommunityCreatorRepo;
+import com.project.idiotclub.app.repo.community.CommunityMembersRepo;
 import com.project.idiotclub.app.response.ApiResponse;
 import com.project.idiotclub.app.util.community.CommunityCreateResponseDto;
 
@@ -18,6 +19,8 @@ public class CommunityCreatorAuth {
 
     @Autowired
     private CommunityCreatorRepo communityCreatorRepo;
+    @Autowired
+    private CommunityMembersRepo communityMembersRepo;
 
     public ApiResponse signUp(String name, String email, String password) {
         if(communityCreatorRepo.findByCreatorEmail(email).isPresent()){
@@ -71,6 +74,8 @@ public class CommunityCreatorAuth {
         	Community community = creator.getCommunity();
         	CommunityInfo communityInfo = community.getCommunityInfo();
         	
+            int memberCount = communityMembersRepo.countByCommunity(community);
+        	
         	CommunityCreateResponseDto communityDto = new CommunityCreateResponseDto();
         	
         	communityDto.setCommunityId(community.getCommunityId());
@@ -81,7 +86,7 @@ public class CommunityCreatorAuth {
              communityDto.setCreatorName(creator.getCreatorName());
              communityDto.setCreatorEmail(creator.getCreatorEmail());
              communityDto.setCommunityInfoId(communityInfo.getId());
-             communityDto.setClubCount(communityInfo.getClubCount());
+             communityDto.setMemberCount(memberCount);
              
              loginOutputDto.setCommunityInfo(communityDto);
         }
