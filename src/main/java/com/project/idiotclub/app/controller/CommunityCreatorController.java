@@ -133,6 +133,14 @@ public class CommunityCreatorController {
         var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
+    
+    @GetMapping("/view-all-member-list")
+    public ResponseEntity<ApiResponse> viewMemberList(@RequestParam Long communityId,@RequestParam Long creatorId) {
+    
+    	var response = communityCreatorService.viewMemberList(communityId, creatorId);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
 
 
 }

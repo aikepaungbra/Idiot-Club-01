@@ -31,9 +31,7 @@ public interface CommunityCreatorService {
      
      ApiResponse viewAllNewClubRequest(Long communityId);
      
-     ApiResponse memberCount(Long communityId);
-     
-    
+     ApiResponse viewMemberList(Long communityId, Long creatorId);     
      
 
 }

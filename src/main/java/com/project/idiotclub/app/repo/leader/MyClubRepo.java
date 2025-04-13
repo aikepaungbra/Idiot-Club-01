@@ -20,4 +20,7 @@ public interface MyClubRepo extends JpaRepository<MyClub, Long> {
     
     MyClub findByClubLeaderAndCommunity(User clubLeader, Community community);
 
+	
+
+	
 }

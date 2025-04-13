@@ -457,10 +457,36 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
 	}
 
 	@Override
-	public ApiResponse memberCount(Long communityId) {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional(readOnly = true)
+	public ApiResponse viewMemberList(Long communityId, Long creatorId) {
+		
+		 if (communityId == null || creatorId == null) {
+		        return new ApiResponse(false, "Community ID and Creator ID are required", null);
+		 }
+		 
+		 var community = communityRepo.findById(communityId).orElse(null);
+		 if (community == null) {
+		        return new ApiResponse(false, "Community not found", null);
+		 }
+		 
+		 if (community.getCommunityCreator().getCommunityCreatorId() != creatorId) {
+		        return new ApiResponse(false, "Unauthorized: You are not the creator of this community", null);
+		 }
+		 
+		 List<CommunityMembers> members = communityMembersRepo.findByCommunity_CommunityId(communityId);
+		 
+		 List<Map<String, Object>> result = members.stream().map(user -> {
+		        Map<String, Object> map = new HashMap<>();
+		        map.put("userId", user.getId());
+		        map.put("userName", user.getUser().getName());
+		        map.put("userPhoto", user.getUser().getProfile_image());
+		        return map;
+		 }).collect(Collectors.toList());
+		
+		 return new ApiResponse(true, "Community members retrieved successfully", result);
 	}
+
+	
 
 
 }
