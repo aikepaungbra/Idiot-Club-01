@@ -122,6 +122,12 @@ public class ClubLeaderController {
      }
     
     
+    @GetMapping("/view-club-join-request/{clubId}")
+    public ResponseEntity<ApiResponse> viewClubJoinReqeuestList(@PathVariable Long clubId) {
+        var response = clubLeaderService.viewClubJoinReqeuestList(clubId);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+     }
     
 
 }

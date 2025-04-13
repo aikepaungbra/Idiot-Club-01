@@ -11,4 +11,7 @@ public interface JoinClubRequestRepo extends JpaRepository<JoinClubRequest, Long
 
     List<JoinClubRequest> findByMyClub(MyClub club);
 
+	List<JoinClubRequest> findByMyClubId(Long clubId);
+
+	
 }

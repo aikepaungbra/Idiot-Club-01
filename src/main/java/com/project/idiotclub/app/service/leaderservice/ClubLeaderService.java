@@ -27,4 +27,5 @@ public interface ClubLeaderService {
     
     ApiResponse viewMyAnnouncement(Long leaderId, Long clubId);
 
+    ApiResponse viewClubJoinReqeuestList(Long clubId);
 }

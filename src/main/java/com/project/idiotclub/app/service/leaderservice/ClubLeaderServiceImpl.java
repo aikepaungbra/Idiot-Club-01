@@ -441,5 +441,27 @@ public class ClubLeaderServiceImpl implements ClubLeaderService{
 		 return new ApiResponse(true, "Announcements retrieved successfully", result);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public ApiResponse viewClubJoinReqeuestList(Long clubId) {
+		
+		if (clubId == null) {
+	        return new ApiResponse(false, "Club ID is required", null);
+	    }
+		
+		 List<JoinClubRequest> requests = joinClubRequestRepo.findByMyClubId(clubId);
+		 
+		 List<Map<String, Object>> result = requests.stream().map(request -> {
+		        Map<String, Object> map = new HashMap<>();
+		        map.put("requestId", request.getId());
+		        map.put("userName", request.getUser().getName());
+		        map.put("userImage", request.getUser().getProfile_image());
+		        map.put("reasonToJoin", request.getReasonToJoin());
+		        return map;
+		    }).collect(Collectors.toList());
+		
+		 return new ApiResponse(true, "Join requests fetched successfully", result);
+	}
+
 
 }
