@@ -23,7 +23,7 @@ public interface ClubLeaderService {
 
     ApiResponse viewClubMembers(Long leaderId,Long clubId);
     
-    ApiResponse viewMyCreationClub(ViewMyCreationClubForm form);
+    ApiResponse viewMyCreationClub(Long leaderId, Long communityId);
     
     ApiResponse viewMyAnnouncement(Long leaderId, Long clubId);
 

@@ -6,8 +6,9 @@ import com.project.idiotclub.app.entity.member.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
+
 import java.util.List;
+
 
 public interface MyClubRepo extends JpaRepository<MyClub, Long> {
 
@@ -16,5 +17,7 @@ public interface MyClubRepo extends JpaRepository<MyClub, Long> {
     List<MyClub> findByCommunity(Community community);
     
     boolean existsByClubLeaderAndCommunity(User clubLeader, Community community);
+    
+    MyClub findByClubLeaderAndCommunity(User clubLeader, Community community);
 
 }

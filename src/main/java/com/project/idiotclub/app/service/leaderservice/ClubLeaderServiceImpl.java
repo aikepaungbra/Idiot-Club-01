@@ -34,9 +34,6 @@ public class ClubLeaderServiceImpl implements ClubLeaderService{
     private final JoinedClubsRepo joinedClubsRepo;
     private final PostRepo postRepo;
 
-
-
-
     @Override
     @Transactional
     public ApiResponse decideNewJoinClubRequest(NewJoinClubRequestDecideForm form) {
@@ -363,37 +360,38 @@ public class ClubLeaderServiceImpl implements ClubLeaderService{
 
 	@Override
 	@Transactional(readOnly = true)
-	public ApiResponse viewMyCreationClub(ViewMyCreationClubForm form) {
+	public ApiResponse viewMyCreationClub(Long leaderId, Long commuityId) {
 	
-		 if (form.getLeaderId() == null || form.getCommuityId() == null) {
+		 if (leaderId == null || commuityId == null) {
 		        return new ApiResponse(false, "Leader ID and Community ID are required", null);
 		   	
 		 }
 		 
-		 var user = userRepo.findById(form.getLeaderId()).orElse(null);
+		 var user = userRepo.findById(leaderId).orElse(null);
 		 
 		 if (user == null) {
 		        return new ApiResponse(false, "Club leader not found", null);
 		 }
 		 
-		 var community = communityRepo.findById(form.getCommuityId());
+		 var community = communityRepo.findById(commuityId).orElse(null);
 		 if (community == null) {
 		        return new ApiResponse(false, "Community not found", null);
 		 }
 		 
-		 var club = myClubRepo.findById(form.getMyClubId());
+		 var club = myClubRepo.findByClubLeaderAndCommunity(user, community);
+		 
 		 if (club == null) {
 		        return new ApiResponse(false, "No club created by this user in the specified community", null);
-		 }
+		    }
 		 
-		 int memberCount = joinedClubsRepo.countByMyClub(club.get());
+		 int memberCount = joinedClubsRepo.countByMyClub(club);
 		 
 		 Map<String, Object> result = new HashMap<>();
-		 result.put("clubName", club.get().getName());
-		 result.put("clubDescription", club.get().getDescription());
-		 result.put("clubLogo", club.get().getLogo());
+		 result.put("clubName", club.getName());
+		 result.put("clubDescription", club.getDescription());
+		 result.put("clubLogo", club.getLogo());
 		 result.put("memberCount", memberCount);
-		 result.put("clubId", club.get().getId());	
+		 result.put("clubId", club.getId());	
 		 return new ApiResponse(true, "Club retrieved successfully", result);
 	}
 
