@@ -179,6 +179,22 @@ public class ClubMemberServiceImpl implements ClubMemberService {
         if(!isMember){
             return new ApiResponse(false,"you are not member of this community",null);
         }
+        
+        boolean isAlreadyClubMember = joinedClubsRepo.findByUserAndMyClub(user, club) != null;
+        
+        if (isAlreadyClubMember) {
+            return new ApiResponse(false, "You are already a member of this club", null);
+        }
+        
+        boolean hasPendingOrApprovedRequest = joinClubRequestRepo.existsByUserAndMyClubAndRequestStatusIn(
+                user,
+                club,
+                List.of(RequestStatus.PENDING, RequestStatus.APPROVED)
+        );
+        
+        if (hasPendingOrApprovedRequest) {
+            return new ApiResponse(false, "You have already submitted a request for this club", null);
+        }
 
         var joinClubRequest = new JoinClubRequest();
         joinClubRequest.setUser(user);
