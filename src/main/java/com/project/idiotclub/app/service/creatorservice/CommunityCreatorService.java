@@ -33,5 +33,6 @@ public interface CommunityCreatorService {
      
      ApiResponse viewMemberList(Long communityId, Long creatorId);     
      
+     ApiResponse removeMember(Long creatorId, Long communityId, Long userId);
 
 }

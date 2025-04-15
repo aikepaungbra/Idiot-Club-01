@@ -8,10 +8,12 @@ import com.project.idiotclub.app.entity.community.CommunityMembers;
 import com.project.idiotclub.app.entity.community.JoinCommunityRequest;
 import com.project.idiotclub.app.entity.leader.MyClub;
 import com.project.idiotclub.app.entity.member.CreateClubRequest;
+import com.project.idiotclub.app.entity.member.JoinClubRequest;
 import com.project.idiotclub.app.entity.member.User;
 import com.project.idiotclub.app.repo.community.*;
 import com.project.idiotclub.app.repo.leader.MyClubRepo;
 import com.project.idiotclub.app.repo.member.CreateClubRequestRepo;
+import com.project.idiotclub.app.repo.member.JoinClubRequestRepo;
 import com.project.idiotclub.app.repo.member.JoinedClubsRepo;
 import com.project.idiotclub.app.repo.member.UserRepo;
 import com.project.idiotclub.app.response.ApiResponse;
@@ -42,6 +44,8 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
     private final CreateClubRequestRepo createClubRequestRepo;
     private final MyClubRepo myClubRepo;
     private final JoinedClubsRepo joinedClubsRepo;
+    private final JoinClubRequestRepo joinClubRequestRepo;
+    
 
     @Override
     @Transactional
@@ -487,7 +491,62 @@ public class CommunityCreatorServiceImpl implements CommunityCreatorService {
 		 return new ApiResponse(true, "Community members retrieved successfully", result);
 	}
 
-	
+	@Override
+	@Transactional
+	public ApiResponse removeMember(Long creatorId, Long communityId, Long userId) {
+		
+		if (creatorId == null || communityId == null || userId == null) {
+	        return new ApiResponse(false, "Invalid request. All IDs are required.", null);
+	    }
+		
+		var creator = communityCreatorRepo.findById(creatorId).orElse(null);
+	    var community = communityRepo.findById(communityId).orElse(null);
+	    var user = userRepo.findById(userId).orElse(null);
+	    
+	    if (creator == null) {
+	        return new ApiResponse(false, "Community creator not found", null);
+	    }
+	    
+	    if (community == null) {
+	        return new ApiResponse(false, "Community not found", null);
+	    }
+
+	    if (user == null) {
+	        return new ApiResponse(false, "User not found", null);
+	    }
+	    
+	    if (!community.getCommunityCreator().equals(creator)) {
+	        return new ApiResponse(false, "You are not the creator of this community", null);
+	    }
+	    
+	    var membership = communityMembersRepo.findByUserAndCommunity(user, community);
+	    if (membership == null) {
+	        return new ApiResponse(false, "User is not a member of this community", null);
+	    }
+	    
+	    communityMembersRepo.delete(membership);
+	    
+	    List<JoinCommunityRequest> communityRequests = joinCommunityRequestRepo.findByUserAndCommunity(user, community);
+	    for (JoinCommunityRequest req : communityRequests) {
+	        joinCommunityRequestRepo.delete(req);
+	    }
+	    
+	    List<MyClub> communityClubs = myClubRepo.findByCommunity(community);
+	    for (MyClub club : communityClubs) {
+	        
+	        var joinedClub = joinedClubsRepo.findByUserAndMyClub(user, club);
+	        if (joinedClub != null) {
+	            joinedClubsRepo.delete(joinedClub);
+	        }
+
+	        List<JoinClubRequest> clubRequests = joinClubRequestRepo.findByUserAndMyClub(user, club);
+	        for (JoinClubRequest req : clubRequests) {
+	            joinClubRequestRepo.delete(req);
+	        }
+	    }
+		
+	    return new ApiResponse(true, "User removed from community, clubs, and all related requests", null);
+	}
 
 
 }

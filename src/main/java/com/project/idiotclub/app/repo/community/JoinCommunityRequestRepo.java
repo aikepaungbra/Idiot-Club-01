@@ -18,5 +18,6 @@ public interface JoinCommunityRequestRepo extends JpaRepository<JoinCommunityReq
 //    List<JoinCommunityRequest> findByCommunity(Community community);
     
     List<JoinCommunityRequest> findByCommunityAndStatus(Community community, RequestStatus status);
-    
+
+	List<JoinCommunityRequest> findByUserAndCommunity(User user, Community community);
 }

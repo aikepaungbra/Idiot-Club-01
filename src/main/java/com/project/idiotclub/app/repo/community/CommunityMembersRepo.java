@@ -25,7 +25,8 @@ public interface CommunityMembersRepo extends JpaRepository<CommunityMembers, Lo
     List<CommunityMembers> findByCommunity_CommunityId(Long communityId);
 
 	int countByCommunity(Community community);
-	
 
+	CommunityMembers findByUserAndCommunity(User user, Community community);
+	
 }
 

@@ -18,6 +18,7 @@ public interface JoinClubRequestRepo extends JpaRepository<JoinClubRequest, Long
 
 	boolean existsByUserAndMyClubAndRequestStatusIn(User user, MyClub club, List<RequestStatus> of);
 
-	
+	List<JoinClubRequest> findByUserAndMyClub(User user, MyClub club);
+
 	
 }

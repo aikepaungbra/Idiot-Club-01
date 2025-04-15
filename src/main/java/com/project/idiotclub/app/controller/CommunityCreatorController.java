@@ -141,6 +141,13 @@ public class CommunityCreatorController {
         var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
-
+    
+    @DeleteMapping("/remove-member/{communityId}/{creatorId}/{userId}")
+    public ResponseEntity<ApiResponse> kickMember(@PathVariable Long communityId,@PathVariable Long creatorId,@PathVariable Long userId) {
+    
+    	var response = communityCreatorService.removeMember(creatorId, communityId, userId);
+        var status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
 
 }
